@@ -1,4 +1,4 @@
-import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 import Link from 'next/link'
 
 export default function Projects() {
@@ -81,10 +81,10 @@ export default function Projects() {
   ]
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    <div className="min-h-screen">
+      <Navbar />
       
-      <main className="flex-1 ml-64 p-12">
+      <main className="pt-16 p-4 sm:p-6 md:p-12">
         <div className="max-w-6xl mx-auto">
           {/* En-tête de page */}
           <div className="mb-12">

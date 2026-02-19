@@ -1,4 +1,4 @@
-import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 import Image from 'next/image'
 
 export default function Certifications() {
@@ -51,10 +51,10 @@ export default function Certifications() {
   ]
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    <div className="min-h-screen">
+      <Navbar />
       
-      <main className="flex-1 ml-64 bg-gray-900">
+      <main className="pt-16 bg-gray-900">
         {/* En-tête de la page */}
         <div className="bg-gradient-to-r from-blue-900/30 to-cyan-900/20 border-b border-blue-800/30">
           <div className="max-w-7xl mx-auto px-8 py-16">

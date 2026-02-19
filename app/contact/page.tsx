@@ -1,6 +1,6 @@
 'use client'
 
-import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 import { useState } from 'react'
 
 export default function Contact() {
@@ -104,10 +104,10 @@ export default function Contact() {
   ]
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    <div className="min-h-screen">
+      <Navbar />
       
-      <main className="flex-1 ml-64 p-12">
+      <main className="pt-16 p-4 sm:p-6 md:p-12">
         <div className="max-w-6xl mx-auto">
           {/* En-tête de page */}
           <div className="mb-12">
@@ -189,8 +189,9 @@ export default function Contact() {
 
               {/* Télécharger CV */}
               <a
-                href="/cv-koffi-ambroise.pdf"
-                download
+                href="/CV_Koffi_Ambroise.pdf"
+                download="CV_Koffi_Ambroise.pdf"
+                target="_blank"
                 className="block w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-4 rounded-xl font-semibold transition-all hover:shadow-xl hover:shadow-purple-600/50 text-center"
               >
                 <div className="flex items-center justify-center gap-2">

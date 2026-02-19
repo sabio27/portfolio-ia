@@ -1,11 +1,11 @@
-import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 
 export default function About() {
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    <div className="min-h-screen">
+      <Navbar />
       
-      <main className="flex-1 ml-64 p-12">
+      <main className="pt-16 p-4 sm:p-6 md:p-12">
         <div className="max-w-4xl mx-auto">
           {/* En-tête de page */}
           <div className="mb-12">
@@ -65,6 +65,12 @@ export default function About() {
                     </span>
                     <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
                       Deep Learning
+                    </span>
+                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
+                      IoT
+                    </span>
+                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
+                      HPC
                     </span>
                   </div>
                 </div>
@@ -215,7 +221,7 @@ export default function About() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white mb-3">
-                    Recherche de Stage en Intelligence Artificielle
+                    Recherche de Stage en Data & IA
                   </h3>
                   <div className="space-y-2 text-gray-300">
                     <p className="flex items-center gap-2">
@@ -228,7 +234,7 @@ export default function About() {
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="text-blue-400">•</span>
-                      <span><strong>Domaines :</strong> Intelligence Artificielle, Data Science, Machine Learning, Deep Learning</span>
+                      <span><strong>Domaines :</strong> Intelligence Artificielle - Data Science - Machine Learning - Deep Learning - IoT - HPC</span>
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="text-blue-400">•</span>

@@ -1,4 +1,4 @@
-import Sidebar from '@/components/Sidebar'
+import Navbar from '@/components/Navbar'
 
 export default function Skills() {
   // Catégories de compétences
@@ -10,6 +10,7 @@ export default function Skills() {
         { name: "Python", description: "Maîtrise solide - Projets académiques et analyse de données" },
         { name: "R", description: "Analyse statistique et visualisation (ggplot2, Shiny)" },
         { name: "SQL", description: "Requêtes et gestion de bases de données" },
+        { name: "NoSQL", description: "Requêtes et gestion de bases de données" },
       ]
     },
     {
@@ -78,13 +79,17 @@ export default function Skills() {
     "Machine Learning Supervisé",
     "Machine Learning Non-supervisé",
     "Deep Learning",
+    "Traitement du Langage Naturel (NLP)",  
+    "Computer Vision",
+    "IoT",
+    "HPC (High Performance Computing)",
   ]
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
+    <div className="min-h-screen">
+      <Navbar />
       
-      <main className="flex-1 ml-64 p-12">
+      <main className="pt-16 p-4 sm:p-6 md:p-12">
         <div className="max-w-6xl mx-auto">
           {/* En-tête de page */}
           <div className="mb-12">
