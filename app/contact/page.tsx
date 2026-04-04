@@ -23,13 +23,20 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('sending')
-    
-    // Simuler l'envoi (à remplacer par votre logique d'envoi)
-    setTimeout(() => {
+
+    const res = await fetch('https://formspree.io/f/xwvwryvk', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+
+    if (res.ok) {
       setStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
       setTimeout(() => setStatus('idle'), 3000)
-    }, 1500)
+    } else {
+      setStatus('error')
+    }
   }
 
   const contactInfo = [
@@ -66,6 +73,18 @@ export default function Contact() {
       link: 'tel:+2250173082662',
       color: 'from-green-500 to-emerald-500'
     },
+    {
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+         <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.855L.057 23.885a.5.5 0 00.638.606l6.259-1.647A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.865 9.865 0 01-5.031-1.378l-.361-.214-3.741.984.999-3.648-.235-.374A9.86 9.86 0 012.1 12C2.1 6.534 6.534 2.1 12 2.1c5.466 0 9.9 4.434 9.9 9.9 0 5.466-4.434 9.9-9.9 9.9z"/>
+       </svg>
+       ),
+       title: 'WhatsApp',
+       value: 'Envoyer un message',
+       link: 'https://wa.me/message/ORM6MH5AYGLML1',
+       color: 'from-green-500 to-green-600'
+   },
     {
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,9 +208,8 @@ export default function Contact() {
 
               {/* Télécharger CV */}
               <a
-                href="/CV_Koffi_Ambroise.pdf"
-                download="CV_Koffi_Ambroise.pdf"
-                target="_blank"
+                href="/CV_Koffi_K_Ambroise_IA_Data.pdf"
+                download="CV_Koffi_K_Ambroise_IA_Data.pdf"
                 className="block w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-4 rounded-xl font-semibold transition-all hover:shadow-xl hover:shadow-purple-600/50 text-center"
               >
                 <div className="flex items-center justify-center gap-2">
@@ -313,6 +331,16 @@ export default function Contact() {
                       </svg>
                       <p className="text-green-300 font-medium">
                         Message envoyé avec succès ! Je vous répondrai dans les plus brefs délais.
+                      </p>
+                    </div>
+                  )}
+                  {status === 'error' && (
+                    <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-4 flex items-center gap-3">
+                      <svg className="w-6 h-6 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-red-300 font-medium">
+                        Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer plus tard.
                       </p>
                     </div>
                   )}

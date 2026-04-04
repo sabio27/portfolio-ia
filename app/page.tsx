@@ -34,7 +34,7 @@ export default function Home() {
                     <div className="relative w-full aspect-square rounded-full overflow-hidden border-8 border-gray-900 shadow-2xl shadow-blue-600/50 group-hover:shadow-blue-500/70 transition-all duration-500">
                       <img 
                         src="/phot1.png" 
-                        alt="Koffi Ambroise - Spécialiste IA & Data Science"
+                        alt="Koffi Ambroise - Ingénieur IA & Data Science"
                         className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                       />
                       
@@ -75,15 +75,16 @@ export default function Home() {
 
                   {/* Sous-titre */}
                   <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-100 leading-snug">
-                    Spécialiste Intelligence Artificielle & Data Science
+                    Ingénieur IA & Data Science
                   </h2>
                 </div>
 
                 {/* Description */}
                 <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl">
-                  Ingénieur en formation spécialisé en <span className="text-blue-400 font-semibold">IA</span> et <span className="text-blue-400 font-semibold">Data Science</span>. 
-                  Passionné par l'apprentissage profond, le traitement du langage naturel 
-                  et le développement de solutions innovantes basées sur les données.
+                  Ingénieur en formation, spécialisé en <span className="text-blue-400 font-semibold">IA</span>, <span className="text-blue-400 font-semibold">Data Science</span> et <span className="text-blue-400 font-semibold">IoT</span>. 
+                  Passionné par l'apprentissage profond, le traitement du langage naturel, 
+                  la conception de systèmes connectés et le développement de solutions innovantes 
+                  basées sur les données et l'<span className="text-blue-400 font-semibold">HPC</span>.
                 </p>
 
                 {/* Boutons */}

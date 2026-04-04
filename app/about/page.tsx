@@ -22,15 +22,16 @@ export default function About() {
             <h2 className="text-2xl font-bold text-white mb-6">Qui suis-je ?</h2>
             <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-8">
               <p className="text-gray-300 text-lg leading-relaxed mb-4">
-                Ingénieur en formation spécialisé en Intelligence Artificielle et Data Science, 
+                Ingénieur en formation, spécialisé en Intelligence Artificielle, Data Science et IoT, 
                 je possède des compétences solides en apprentissage profond, traitement du langage 
-                naturel et systèmes intelligents, validées par des projets académiques d'envergure 
-                professionnelle.
+                naturel, conception de systèmes connectés et architecture parallèle (HPC), validées 
+                par des projets académiques d'envergure professionnelle.
               </p>
               <p className="text-gray-300 text-lg leading-relaxed">
                 Rigoureux et passionné, je mobilise des connaissances théoriques en mathématiques 
-                appliquées pour résoudre des problèmes complexes, générer des insights stratégiques 
-                et développer des solutions innovantes.
+                appliquées et programmation haute performance pour résoudre des problèmes complexes, 
+                concevoir des systèmes intelligents connectés, générer des insights stratégiques 
+                et développer des solutions innovantes à fort impact.
               </p>
             </div>
           </section>

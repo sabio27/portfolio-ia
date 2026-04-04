@@ -25,7 +25,7 @@ export default function Navbar() {
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
               Koffi Ambroise
             </h1>
-            <p className="text-xs text-gray-400 hidden sm:block">Spécialiste IA & Data Science</p>
+            <p className="text-xs text-gray-400 hidden sm:block">Ingénieur IA & Data Science</p>
           </Link>
 
           <div className="hidden md:flex items-center space-x-1">
