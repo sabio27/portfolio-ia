@@ -70,6 +70,16 @@ export default function Projects() {
     },
     {
       id: 7,
+      slug: 'detection-fraudes-bancaires',
+      title: 'Détection de fraudes bancaires & FinTechs',
+      module: "Architecture d'Algotrithmes Parallèles",
+      period: 'Master 2 - 2025/2026',
+      description: "Implémentation d’un algorithme multi-agents parallèles pour la détection de fraudes.",
+      technologies: ['Python', 'Algorithmes Parallèles', 'Multiprocessing', 'HPC', 'Détection de Fraudes'],
+      color: 'from-indigo-500 to-purple-500'
+    },
+    {
+      id: 8,
       slug: 'analyse-retours-produits',
       title: 'Analyse des retours produits via la visualisation',
       module: 'Module Visualisation',
