@@ -388,7 +388,7 @@ export default function DetectionMaladiesOculaires() {
                 <div>
                   <h4 className="text-white font-semibold mb-2">Détection Anomalies</h4>
                   <p className="text-gray-300 text-sm">
-                    27 cas atypiques détectés automatiquement via erreur de reconstruction élevée (MSE > seuil 99e percentile).
+                    27 cas atypiques détectés automatiquement via erreur de reconstruction élevée (MSE {'>'} seuil 99e percentile).
                   </p>
                 </div>
               </div>
