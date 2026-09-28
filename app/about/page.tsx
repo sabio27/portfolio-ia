@@ -1,253 +1,153 @@
-import Navbar from '@/components/Navbar'
+'use client'
+
+import Link from 'next/link'
+import { useLang } from '@/lib/i18n'
+import { education } from '@/lib/content'
+import PageHeader from '@/components/PageHeader'
+import CvLink, { OtherCvLink } from '@/components/CvLink'
+
+const strengths = [
+  {
+    icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+    title: { fr: 'Vision par ordinateur', en: 'Computer vision' },
+    body: {
+      fr: "Détection d'objets (YOLOv8, YOLOv11), classification d'images, auto-encodeurs et cartes de saillance, sur des jeux de données réels et déséquilibrés.",
+      en: 'Object detection (YOLOv8, YOLOv11), image classification, autoencoders and saliency maps, on real-world, imbalanced datasets.',
+    },
+  },
+  {
+    icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
+    title: { fr: 'Machine learning & statistiques', en: 'Machine learning & statistics' },
+    body: {
+      fr: "Modélisation prédictive, scoring, NLP et séries temporelles, avec une évaluation rigoureuse : métriques adaptées au métier et intervalles de confiance.",
+      en: 'Predictive modelling, scoring, NLP and time series, with rigorous evaluation: business-relevant metrics and confidence intervals.',
+    },
+  },
+  {
+    icon: 'M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01',
+    title: { fr: 'Mise en production', en: 'Production deployment' },
+    body: {
+      fr: "Services REST avec FastAPI, conteneurisation Docker, versionnage des modèles avec MLflow et intégration continue avec GitHub Actions.",
+      en: 'REST services with FastAPI, Docker containers, model versioning with MLflow and continuous integration with GitHub Actions.',
+    },
+  },
+  {
+    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+    title: { fr: 'Rigueur et autonomie', en: 'Rigour and autonomy' },
+    body: {
+      fr: "Démarche méthodique, choix techniques argumentés et documentés. Chez LYNK, j'ai porté seul le projet, de la collecte des images à la mise en service des API.",
+      en: 'A methodical approach with well-argued, documented technical choices. At LYNK, I carried the project on my own, from collecting images to running the APIs in production.',
+    },
+  },
+]
 
 export default function About() {
+  const { t, lang } = useLang()
+
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-16 p-4 sm:p-6 md:p-12">
-        <div className="max-w-4xl mx-auto">
-          {/* En-tête de page */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                À propos
-              </span>
-            </h1>
-            <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
+    <div className="container-page py-12 md:py-16">
+      <div className="mx-auto max-w-4xl">
+        <PageHeader title={{ fr: 'À propos', en: 'About' }} />
+
+        {/* Présentation */}
+        <section className="mb-16">
+          <h2 className="section-title">{lang === 'fr' ? 'Profil' : 'Profile'}</h2>
+          <div className="card space-y-4 p-6 text-base leading-relaxed text-gray-300 md:p-8 md:text-lg">
+            <p>
+              {t({
+                fr: "Ingénieur IA & Data Science, titulaire d'un Master en Intelligence Artificielle de l'Université Félix Houphouët-Boigny, délivré en partenariat avec l'Université Rennes 2. Ce qui m'intéresse, c'est le moment où un modèle cesse d'être une expérience pour devenir un outil : utilisé, suivi et amélioré par ceux qui en ont besoin.",
+                en: "AI & Data Science Engineer holding a Master's degree in Artificial Intelligence from Félix Houphouët-Boigny University, awarded in partnership with Rennes 2 University. What interests me is the moment a model stops being an experiment and becomes a tool: used, monitored and improved by the people who need it.",
+              })}
+            </p>
+            <p>
+              {t({
+                fr: "Ma formation initiale en mathématiques appliquées m'apporte une base solide en statistiques et en modélisation. Je l'ai mise en pratique sur des projets variés : vision par ordinateur appliquée au diagnostic médical et à l'agriculture, traitement du langage naturel, prévision de séries temporelles et calcul parallèle.",
+                en: 'My background in applied mathematics gives me a strong foundation in statistics and modelling. I have applied it to a range of projects: computer vision for medical diagnosis and agriculture, natural language processing, time series forecasting and parallel computing.',
+              })}
+            </p>
+            <p>
+              {t({
+                fr: "Lors de mon stage de fin d'études chez LYNK SARL, j'ai conçu un système de surveillance phytosanitaire du cacaoyer, livré sous forme de services REST conteneurisés, versionnés avec MLflow et vérifiés par intégration continue.",
+                en: 'During my final internship at LYNK SARL, I designed a plant-health monitoring system for cocoa, delivered as containerized REST services, versioned with MLflow and checked through continuous integration.',
+              })}{' '}
+              <Link href="/experience" className="font-semibold text-brand-400 hover:text-brand-300">
+                {lang === 'fr' ? 'Voir le détail →' : 'See details →'}
+              </Link>
+            </p>
           </div>
+        </section>
 
-          {/* Présentation principale */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6">Qui suis-je ?</h2>
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-8">
-              <p className="text-gray-300 text-lg leading-relaxed mb-4">
-                Ingénieur en formation, spécialisé en Intelligence Artificielle, Data Science et IoT, 
-                je possède des compétences solides en apprentissage profond, traitement du langage 
-                naturel, conception de systèmes connectés et architecture parallèle (HPC), validées 
-                par des projets académiques d'envergure professionnelle.
-              </p>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Rigoureux et passionné, je mobilise des connaissances théoriques en mathématiques 
-                appliquées et programmation haute performance pour résoudre des problèmes complexes, 
-                concevoir des systèmes intelligents connectés, générer des insights stratégiques 
-                et développer des solutions innovantes à fort impact.
-              </p>
-            </div>
-          </section>
-
-          {/* Parcours académique */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6">Parcours Académique</h2>
-            
-            <div className="space-y-6">
-              {/* Master 2 */}
-              <div className="relative pl-8 pb-8 border-l-2 border-blue-600">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-600 rounded-full"></div>
-                <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-700/50 transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-blue-400">Master 2 – Intelligence Artificielle</h3>
-                    <span className="text-sm text-gray-500 bg-blue-900/20 px-3 py-1 rounded-full">
-                      2025-2026 (en cours)
-                    </span>
+        {/* Parcours académique */}
+        <section className="mb-16">
+          <h2 className="section-title">{lang === 'fr' ? 'Parcours académique' : 'Education'}</h2>
+          <ol className="space-y-6">
+            {education.map((e, i) => (
+              <li key={i} className={`relative border-l-2 pl-8 ${i === 0 ? 'border-brand-600' : i === 1 ? 'border-brand-700' : 'border-brand-800'} ${i < education.length - 1 ? 'pb-2' : ''}`}>
+                <span className={`absolute -left-[9px] top-1 h-4 w-4 rounded-full ring-4 ring-dark-950 ${i === 0 ? 'bg-brand-600' : i === 1 ? 'bg-brand-700' : 'bg-brand-800'}`} />
+                <div className="card card-hover p-6">
+                  <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                    <h3 className="text-lg font-bold text-brand-400 md:text-xl">{t(e.title)}</h3>
+                    <span className="w-fit shrink-0 rounded-full bg-brand-900/40 px-3 py-1 text-sm text-gray-300">{t(e.period)}</span>
                   </div>
-                  <p className="text-gray-400 mb-3">
-                    Université Félix Houphouët-Boigny | Abidjan, Côte d'Ivoire
-                  </p>
+                  <p className="mb-4 text-gray-400">{t(e.school)}</p>
                   <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Apprentissage Profond
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Traitement du Langage Naturel
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Systèmes Intelligents
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Deep Learning
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      IoT
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      HPC
-                    </span>
+                    {e.tags.map((tag, j) => (
+                      <span key={j} className="chip text-xs">{t(tag)}</span>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-              {/* Master 1 */}
-              <div className="relative pl-8 pb-8 border-l-2 border-blue-700">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-700 rounded-full"></div>
-                <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-700/50 transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-blue-400">Master 1 – Data Science / Intelligence Artificielle</h3>
-                    <span className="text-sm text-gray-500 bg-blue-900/20 px-3 py-1 rounded-full">
-                      2024-2025
-                    </span>
-                  </div>
-                  <p className="text-gray-400 mb-3">
-                    Université Félix Houphouët-Boigny | Abidjan, Côte d'Ivoire
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Machine Learning
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Modélisation Statistique
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Analyse Prédictive
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Visualisation de Données
-                    </span>
-                  </div>
+        {/* Points forts */}
+        <section className="mb-16">
+          <h2 className="section-title">{lang === 'fr' ? 'Points forts' : 'Strengths'}</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {strengths.map((s, i) => (
+              <div key={i} className="card card-hover group p-6">
+                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-brand-600/35 bg-brand-600/15 text-brand-300 transition-transform group-hover:scale-105`}>
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {s.icon.split(' M').map((d, k) => (
+                      <path key={k} strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={k === 0 ? d : 'M' + d} />
+                    ))}
+                  </svg>
                 </div>
+                <h3 className="mb-2 text-lg font-bold text-white">{t(s.title)}</h3>
+                <p className="leading-relaxed text-gray-400">{t(s.body)}</p>
               </div>
+            ))}
+          </div>
+        </section>
 
-              {/* Licence */}
-              <div className="relative pl-8 pb-8 border-l-2 border-blue-800">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-800 rounded-full"></div>
-                <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-700/50 transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-blue-400">Licence – Mathématiques Appliquées</h3>
-                    <span className="text-sm text-gray-500 bg-blue-900/20 px-3 py-1 rounded-full">
-                      2018-2019
-                    </span>
-                  </div>
-                  <p className="text-gray-400 mb-3">
-                    Université Félix Houphouët-Boigny | Abidjan, Côte d'Ivoire
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Mathématiques Discrètes
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Calcul Scientifique
-                    </span>
-                    <span className="text-xs px-3 py-1 bg-blue-900/20 border border-blue-800/30 rounded-full text-blue-300">
-                      Statistiques
-                    </span>
-                  </div>
+        {/* Objectif professionnel */}
+        <section>
+          <h2 className="section-title">{lang === 'fr' ? 'Objectif professionnel' : 'Career goal'}</h2>
+          <div className="rounded-2xl border border-brand-700/50 bg-gradient-to-r from-brand-900/40 to-gold-900/20 p-6 md:p-8">
+            <h3 className="mb-4 text-xl font-bold text-white">
+              {t({ fr: 'Poste en IA, Data, Machine Learning ou Vision par ordinateur', en: 'Role in AI, Data, Machine Learning or Computer Vision' })}
+            </h3>
+            <dl className="grid gap-3 text-gray-300 sm:grid-cols-2">
+              {[
+                [{ fr: 'Postes visés', en: 'Target roles' }, { fr: 'Ingénieur IA, Data Scientist, ML Engineer, Ingénieur Computer Vision', en: 'AI Engineer, Data Scientist, ML Engineer, Computer Vision Engineer' }],
+                [{ fr: 'Modalités', en: 'Work mode' }, { fr: 'Sur site ou en télétravail', en: 'On-site or remote' }],
+                [{ fr: 'Localisation', en: 'Location' }, "Abidjan, Côte d'Ivoire"],
+                [{ fr: 'Langues', en: 'Languages' }, { fr: 'Français (natif), anglais (B1)', en: 'French (native), English (B1)' }],
+              ].map(([k, v], i) => (
+                <div key={i}>
+                  <dt className="text-sm font-semibold text-brand-400">{t(k)}</dt>
+                  <dd>{t(v)}</dd>
                 </div>
-              </div>
-
-              {/* Baccalauréat */}
-              <div className="relative pl-8">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-900 rounded-full"></div>
-                <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-700/50 transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-blue-400">Diplôme du Baccalauréat – Série D</h3>
-                    <span className="text-sm text-gray-500 bg-blue-900/20 px-3 py-1 rounded-full">
-                      2013-2014
-                    </span>
-                  </div>
-                  <p className="text-gray-400">
-                    Lycée Moderne de Divo | Divo, Côte d'Ivoire
-                  </p>
-                </div>
-              </div>
+              ))}
+            </dl>
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <CvLink className="btn-primary" />
+              <OtherCvLink />
             </div>
-          </section>
-
-          {/* Points forts */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-white mb-6">Mes Points Forts</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-600/50 transition-all group">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Formation Solide</h3>
-                <p className="text-gray-400">
-                  Parcours académique complet en mathématiques appliquées, Data Science et IA
-                </p>
-              </div>
-
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-600/50 transition-all group">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Compétences Techniques</h3>
-                <p className="text-gray-400">
-                  Maîtrise de l'apprentissage profond, NLP et systèmes intelligents
-                </p>
-              </div>
-
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-600/50 transition-all group">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Projets Concrets</h3>
-                <p className="text-gray-400">
-                  Expérience pratique validée par des projets académiques d'envergure professionnelle
-                </p>
-              </div>
-
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-6 hover:border-blue-600/50 transition-all group">
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-600 to-amber-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">Rigueur & Passion</h3>
-                <p className="text-gray-400">
-                  Approche méthodique combinée à une passion pour l'innovation technologique
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Objectif professionnel */}
-          <section>
-            <h2 className="text-2xl font-bold text-white mb-6">Objectif Professionnel</h2>
-            <div className="bg-gradient-to-r from-blue-900/30 to-cyan-900/20 border border-blue-700/50 rounded-xl p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-3">
-                    Recherche de Stage en Data & IA
-                  </h3>
-                  <div className="space-y-2 text-gray-300">
-                    <p className="flex items-center gap-2">
-                      <span className="text-blue-400">•</span>
-                      <span><strong>Durée :</strong> 6 mois</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-blue-400">•</span>
-                      <span><strong>Disponibilité :</strong> À partir d'Avril 2026</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-blue-400">•</span>
-                      <span><strong>Domaines :</strong> Intelligence Artificielle - Data Science - Machine Learning - Deep Learning - IoT - HPC</span>
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-blue-400">•</span>
-                      <span><strong>Localisation :</strong> Abidjan, Côte d'Ivoire (ou à distance)</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </main>
+          </div>
+        </section>
+      </div>
     </div>
   )
 }

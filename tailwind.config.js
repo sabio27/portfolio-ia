@@ -1,37 +1,29 @@
 /** @type {import('tailwindcss').Config} */
+// Toutes les couleurs de marque passent par les variables CSS définies dans app/globals.css.
+const v = (name) => `rgb(var(--${name}) / <alpha-value>)`
+
 module.exports = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        // Palette bleu sombre avec dégradés
-        dark: {
-          950: '#0a0e1a',  // Presque noir
-          900: '#0f1419',  // Très sombre
-          800: '#1a1f2e',  // Sombre
-          700: '#252d3f',  // Moyen sombre
+        // Surfaces (du plus profond au plus élevé)
+        dark: { 950: v('bg'), 900: v('surface'), 800: v('surface-2'), 700: v('surface-3') },
+        // Émeraude : accent principal
+        brand: {
+          950: v('brand-950'), 900: v('brand-900'), 800: v('brand-800'), 700: v('brand-700'),
+          600: v('brand-600'), 500: v('brand-500'), 400: v('brand-400'), 300: v('brand-300'),
         },
-        blue: {
-          950: '#0c1e3d',
-          900: '#1a2744',
-          800: '#1e3a5f',
-          700: '#2563eb',
-          600: '#3b82f6',
-          500: '#60a5fa',
-          400: '#93c5fd',
-        },
-        accent: {
-          blue: '#3b82f6',
-          cyan: '#06b6d4',
-          glow: '#60a5fa',
-        }
+        // Or : accent secondaire (touches ponctuelles)
+        'on-brand': v('on-brand'),
+        gold: { 900: v('gold-900'), 600: v('gold'), 500: v('gold'), 400: v('gold'), 300: v('gold') },
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Sora', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },

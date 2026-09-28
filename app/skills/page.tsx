@@ -1,170 +1,127 @@
-import Navbar from '@/components/Navbar'
+'use client'
+
+import { useLang, type T } from '@/lib/i18n'
+import PageHeader from '@/components/PageHeader'
+
+type Skill = { name: T; desc: T }
+
+const categories: { title: T; skills: Skill[] }[] = [
+  {
+    title: { fr: 'Deep learning & vision par ordinateur', en: 'Deep learning & computer vision' },
+    skills: [
+      { name: 'PyTorch', desc: { fr: 'Réseaux de neurones, entraînement et évaluation', en: 'Neural networks, training and evaluation' } },
+      { name: 'YOLOv8 / YOLOv11', desc: { fr: "Détection d'objets — maladies du cacao, pathologies oculaires", en: 'Object detection — cocoa diseases, eye conditions' } },
+      { name: 'TensorFlow / Keras', desc: { fr: 'Modèles de deep learning', en: 'Deep learning models' } },
+      { name: 'OpenCV', desc: { fr: "Prétraitement et traitement d'images", en: 'Image preprocessing and processing' } },
+      { name: 'Eigen-CAM', desc: { fr: 'Cartes de saillance pour expliquer les prédictions', en: 'Saliency maps to explain predictions' } },
+      { name: { fr: 'Auto-encodeurs', en: 'Autoencoders' }, desc: { fr: "Détection d'anomalies", en: 'Anomaly detection' } },
+    ],
+  },
+  {
+    title: 'Machine Learning',
+    skills: [
+      { name: 'scikit-learn', desc: { fr: 'Modélisation prédictive, clustering (DBSCAN)', en: 'Predictive modelling, clustering (DBSCAN)' } },
+      { name: 'LightGBM', desc: { fr: 'Gradient boosting, ensembling', en: 'Gradient boosting, ensembling' } },
+      { name: 'imbalanced-learn', desc: { fr: 'Classes déséquilibrées (SMOTE, RUS)', en: 'Imbalanced classes (SMOTE, RUS)' } },
+      { name: 'statsmodels', desc: { fr: 'Régression logistique, ARIMA, tests statistiques', en: 'Logistic regression, ARIMA, statistical tests' } },
+    ],
+  },
+  {
+    title: { fr: 'NLP & séries temporelles', en: 'NLP & time series' },
+    skills: [
+      { name: 'spaCy', desc: { fr: 'Prétraitement et lemmatisation de textes', en: 'Text preprocessing and lemmatisation' } },
+      { name: 'Transformers', desc: { fr: 'Modèles de langage pré-entraînés', en: 'Pre-trained language models' } },
+      { name: 'TF-IDF', desc: { fr: 'Vectorisation et classification de textes', en: 'Text vectorisation and classification' } },
+      { name: 'ARIMA / LSTM', desc: { fr: 'Prévision de séries temporelles', en: 'Time series forecasting' } },
+    ],
+  },
+  {
+    title: { fr: 'MLOps & mise en production', en: 'MLOps & deployment' },
+    skills: [
+      { name: 'FastAPI', desc: { fr: 'Services REST pour exposer les modèles', en: 'REST services to serve models' } },
+      { name: 'Docker', desc: { fr: 'Conteneurisation, Docker Compose', en: 'Containerisation, Docker Compose' } },
+      { name: 'MLflow', desc: { fr: 'Suivi des expériences et registre de modèles', en: 'Experiment tracking and model registry' } },
+      { name: 'GitHub Actions', desc: { fr: 'Intégration continue : lint, tests, build', en: 'Continuous integration: lint, tests, build' } },
+      { name: 'Git / GitHub', desc: { fr: 'Versionnage et collaboration', en: 'Version control and collaboration' } },
+      { name: 'Gradio / Streamlit', desc: { fr: 'Interfaces de démonstration', en: 'Demo interfaces' } },
+    ],
+  },
+  {
+    title: { fr: 'Données & bases de données', en: 'Data & databases' },
+    skills: [
+      { name: 'Python', desc: { fr: 'Langage principal — pandas, NumPy', en: 'Main language — pandas, NumPy' } },
+      { name: 'R', desc: { fr: 'Analyse statistique, ggplot2, Shiny', en: 'Statistical analysis, ggplot2, Shiny' } },
+      { name: 'SQL / NoSQL', desc: { fr: 'Bases relationnelles, MongoDB, InfluxDB', en: 'Relational databases, MongoDB, InfluxDB' } },
+      { name: 'Spark', desc: { fr: 'Traitement distribué de données', en: 'Distributed data processing' } },
+    ],
+  },
+  {
+    title: { fr: 'Visualisation & BI', en: 'Visualisation & BI' },
+    skills: [
+      { name: 'Power BI', desc: { fr: 'Tableaux de bord interactifs', en: 'Interactive dashboards' } },
+      { name: 'Tableau', desc: { fr: 'Visualisation et reporting', en: 'Visualisation and reporting' } },
+      { name: 'Matplotlib / Seaborn / Plotly', desc: { fr: 'Visualisation Python', en: 'Python visualisation' } },
+      { name: 'R Shiny', desc: { fr: 'Applications web interactives', en: 'Interactive web apps' } },
+    ],
+  },
+]
+
+const methods: T[] = [
+  { fr: 'Détection d’objets', en: 'Object detection' },
+  { fr: 'Classification d’images', en: 'Image classification' },
+  { fr: 'Apprentissage supervisé', en: 'Supervised learning' },
+  { fr: 'Apprentissage non supervisé', en: 'Unsupervised learning' },
+  'Feature engineering',
+  { fr: 'Analyse exploratoire', en: 'Exploratory analysis' },
+  { fr: 'Séries temporelles', en: 'Time series' },
+  { fr: 'Analyse de sentiments', en: 'Sentiment analysis' },
+  { fr: 'Évaluation & intervalles de confiance', en: 'Evaluation & confidence intervals' },
+  { fr: 'Clustering spatial', en: 'Spatial clustering' },
+  { fr: 'Calcul parallèle (HPC)', en: 'Parallel computing (HPC)' },
+  'IoT',
+]
 
 export default function Skills() {
-  // Catégories de compétences
-  const skillsCategories = [
-    {
-      title: "Langages de Programmation",
-      color: "from-blue-500 to-cyan-500",
-      skills: [
-        { name: "Python", description: "Maîtrise solide - Projets académiques et analyse de données" },
-        { name: "R", description: "Analyse statistique et visualisation (ggplot2, Shiny)" },
-        { name: "SQL", description: "Requêtes et gestion de bases de données" },
-        { name: "NoSQL", description: "Requêtes et gestion de bases de données" },
-      ]
-    },
-    {
-      title: "Intelligence Artificielle & Machine Learning",
-      color: "from-purple-500 to-pink-500",
-      skills: [
-        { name: "TensorFlow", description: "Framework de Deep Learning" },
-        { name: "PyTorch", description: "Réseaux de neurones et apprentissage profond" },
-        { name: "scikit-learn", description: "Machine Learning et modélisation prédictive" },
-        { name: "Keras", description: "API haut niveau pour le Deep Learning" },
-        { name: "NLP", description: "Traitement du langage naturel" },
-        { name: "Computer Vision", description: "Détection de maladies oculaires par Deep Learning" },
-      ]
-    },
-    {
-      title: "Visualisation & Business Intelligence",
-      color: "from-orange-500 to-red-500",
-      skills: [
-        { name: "Power BI", description: "Dashboards interactifs et analyse des retours produits" },
-        { name: "Matplotlib / Seaborn", description: "Visualisation Python" },
-        { name: "ggplot2", description: "Visualisation avancée avec R" },
-        { name: "R Shiny", description: "Applications web interactives pour présentation de résultats" },
-      ]
-    },
-    {
-      title: "Bases de Données",
-      color: "from-green-500 to-emerald-500",
-      skills: [
-        { name: "MongoDB", description: "Base de données NoSQL" },
-        { name: "InfluxDB", description: "Base de données de séries temporelles (projet)" },
-        { name: "SQL", description: "Bases de données relationnelles" },
-        { name: "NoSQL", description: "Concepts et architectures non-relationnelles" },
-      ]
-    },
-    {
-      title: "Outils & Technologies",
-      color: "from-indigo-500 to-purple-500",
-      skills: [
-        { name: "Git / GitHub", description: "Contrôle de version et collaboration" },
-        { name: "Jupyter Notebook", description: "Environnement de développement interactif (Anaconda)" },
-        { name: "VS Code", description: "Environnement de développement" },
-        { name: "Anaconda", description: "Distribution Python pour Data Science" },
-        { name: "Docker", description: "Conteneurisation d'applications (notions)" },
-      ]
-    },
-    {
-      title: "Bibliothèques Python",
-      color: "from-yellow-500 to-orange-500",
-      skills: [
-        { name: "Pandas", description: "Manipulation et analyse de données" },
-        { name: "NumPy", description: "Calcul numérique et matrices" },
-        { name: "Matplotlib", description: "Visualisation de données" },
-        { name: "Seaborn", description: "Visualisation statistique" },
-        { name: "OpenCV", description: "Traitement d'images (Computer Vision)" },
-      ]
-    },
-  ]
-
-  // Compétences méthodologiques
-  const methodologies = [
-    "Modélisation Statistique",
-    "Analyse Prédictive",
-    "Feature Engineering",
-    "Analyse Exploratoire",
-    "Séries Temporelles",
-    "Machine Learning Supervisé",
-    "Machine Learning Non-supervisé",
-    "Deep Learning",
-    "Traitement du Langage Naturel (NLP)",  
-    "Computer Vision",
-    "IoT",
-    "HPC (High Performance Computing)",
-  ]
-
+  const { t, lang } = useLang()
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-16 p-4 sm:p-6 md:p-12">
-        <div className="max-w-6xl mx-auto">
-          {/* En-tête de page */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                Compétences
-              </span>
-            </h1>
-            <div className="h-1 w-20 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-            <p className="text-gray-400 mt-4 text-lg">
-              Compétences techniques acquises à travers mon parcours académique et mes projets
-            </p>
-          </div>
+    <div className="container-page py-12 md:py-16">
+      <PageHeader
+        title={{ fr: 'Compétences', en: 'Skills' }}
+        intro={{
+          fr: 'Compétences mises en œuvre en entreprise et dans mes projets de Master.',
+          en: "Skills applied in industry and in my Master's projects.",
+        }}
+      />
 
-          {/* Catégories de compétences */}
-          <div className="space-y-8 mb-16">
-            {skillsCategories.map((category, index) => (
-              <div key={index} className="bg-dark-900/50 backdrop-blur-sm border border-blue-900/30 rounded-xl p-8 hover:border-blue-700/50 transition-all">
-                {/* En-tête de catégorie */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-lg flex items-center justify-center`}>
-                    <div className="w-6 h-6 border-2 border-white rounded"></div>
-                  </div>
-                  <h2 className="text-2xl font-bold text-white">{category.title}</h2>
-                </div>
-
-                {/* Grille de compétences */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div 
-                      key={skillIndex}
-                      className="bg-dark-800/50 border border-blue-900/20 rounded-lg p-4 hover:border-blue-600/40 hover:bg-dark-800/70 transition-all"
-                    >
-                      <h3 className="text-lg font-semibold text-blue-400 mb-2">
-                        {skill.name}
-                      </h3>
-                      <p className="text-gray-400 text-sm">
-                        {skill.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Compétences méthodologiques */}
-          <div className="bg-gradient-to-r from-blue-900/30 to-cyan-900/20 border border-blue-700/50 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">
-              Compétences Méthodologiques
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {methodologies.map((method, index) => (
-                <div 
-                  key={index}
-                  className="bg-dark-900/50 border border-blue-800/30 rounded-lg p-4 text-center hover:border-blue-600/50 hover:bg-dark-900/70 transition-all"
-                >
-                  <div className="w-10 h-10 mx-auto mb-2 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <div className="w-5 h-5 bg-white rounded-sm"></div>
-                  </div>
-                  <p className="text-gray-300 text-sm font-medium">{method}</p>
+      <div className="mb-16 grid gap-6 lg:grid-cols-2">
+        {categories.map((c, i) => (
+          <section key={i} className="card card-hover p-6 md:p-7">
+            <div className="mb-5 flex items-center gap-3">
+              <span className={`h-9 w-1.5 rounded-full bg-brand-500`} />
+              <h2 className="text-xl font-bold text-white">{t(c.title)}</h2>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {c.skills.map((s, j) => (
+                <div key={j} className="rounded-lg border border-brand-900/30 bg-dark-800/50 p-4 transition-colors hover:border-brand-600/40">
+                  <h3 className="mb-1 font-semibold text-brand-400">{t(s.name)}</h3>
+                  <p className="text-sm text-gray-400">{t(s.desc)}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
+        ))}
+      </div>
 
-          {/* Note de personnalisation */}
-          <div className="mt-8 bg-blue-900/10 border border-blue-800/30 rounded-lg p-6">
-            <p className="text-gray-400 text-sm">
-              <span className="text-blue-400 font-semibold">Note :</span> Ces compétences reflètent mon parcours académique en Master IA/Data Science. 
-              Je continue à développer et approfondir ces compétences à travers de nouveaux projets et formations.
-            </p>
-          </div>
+      <section className="rounded-2xl border border-brand-700/50 bg-gradient-to-r from-brand-900/30 to-gold-900/20 p-6 md:p-8">
+        <h2 className="section-title">{lang === 'fr' ? 'Compétences méthodologiques' : 'Methods'}</h2>
+        <div className="flex flex-wrap gap-2.5">
+          {methods.map((m, i) => (
+            <span key={i} className="rounded-lg border border-brand-800/40 bg-dark-900/60 px-4 py-2 text-sm font-medium text-gray-200">
+              {t(m)}
+            </span>
+          ))}
         </div>
-      </main>
+      </section>
     </div>
   )
 }

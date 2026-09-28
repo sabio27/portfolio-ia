@@ -2,57 +2,122 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+   Design system — thème « Émeraude & or »
+   Toutes les couleurs sont ici (triplets RGB pour les opacités Tailwind).
+   ===================================================================== */
+:root {
+  --bg: 7 19 15;            /* #07130f */
+  --surface: 12 29 23;      /* #0c1d17 */
+  --surface-2: 16 38 30;    /* #10261e */
+  --surface-3: 23 51 42;    /* #17332a */
+
+  --brand-950: 11 42 32;    /* #0b2a20 */
+  --brand-900: 15 51 40;    /* #0f3328 */
+  --brand-800: 19 78 58;    /* #134e3a */
+  --brand-700: 5 150 105;   /* #059669 */
+  --brand-600: 16 185 129;  /* #10b981 — boutons */
+  --brand-500: 52 211 153;  /* #34d399 */
+  --brand-400: 110 231 183; /* #6ee7b7 — liens, accents texte */
+  --brand-300: 167 243 208; /* #a7f3d0 */
+
+  --gold: 251 191 36;       /* #fbbf24 */
+  --gold-900: 58 46 11;     /* #3a2e0b */
+
+  --on-brand: 4 19 13;      /* texte sur bouton émeraude (contraste > 8:1) */
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply bg-dark-950 text-gray-100;
-    /* Dégradé subtil en fond */
-    background-image: 
-      radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%);
+    @apply bg-dark-950 text-gray-100 antialiased;
+    background-image:
+      radial-gradient(900px circle at 8% 0%, rgb(var(--brand-600) / 0.10), transparent 60%),
+      radial-gradient(700px circle at 95% 30%, rgb(var(--gold) / 0.05), transparent 60%);
+    background-attachment: fixed;
   }
 
-  /* Scrollbar personnalisée */
-  ::-webkit-scrollbar {
-    width: 8px;
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-dark-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-brand-800 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-brand-700; }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-brand-400;
   }
 
-  ::-webkit-scrollbar-track {
-    @apply bg-dark-900;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-blue-800 rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-blue-700;
+  /* Respecte le réglage « réduire les animations » du système */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
-  /* Bouton principal */
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Carte standard */
+  .card {
+    @apply rounded-2xl border border-brand-900/40 bg-dark-900/70 backdrop-blur-sm;
+  }
+  .card-hover {
+    @apply transition-all duration-300 hover:border-brand-600/50 hover:bg-dark-800/70;
+  }
+
+  /* Titre de section avec barre dégradée */
+  .section-title {
+    @apply mb-6 flex items-center gap-3 text-2xl font-bold text-white md:text-3xl;
+  }
+  .section-title::before {
+    content: '';
+    @apply h-7 w-1 rounded-full bg-brand-500;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent;
+  }
+
+  /* Chiffres clés (métriques) : émeraude → or */
+  .metric-text {
+    @apply bg-gradient-to-r from-brand-400 to-gold-400 bg-clip-text text-transparent;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-lg border border-brand-800/40 bg-brand-900/30 px-3 py-1 text-sm text-brand-300;
+  }
+  .chip-muted {
+    @apply inline-flex items-center rounded-lg border border-brand-900/70 bg-dark-800/70 px-3 py-1 text-sm text-gray-300;
+  }
+
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg 
-           transition-all duration-300 font-medium;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-on-brand shadow-lg shadow-brand-950/60 transition-colors hover:bg-brand-500 md:text-base;
   }
-
-  /* Bouton secondaire */
   .btn-secondary {
-    @apply border border-blue-600 text-blue-500 hover:bg-blue-600/10 
-           px-6 py-3 rounded-lg transition-all duration-300 font-medium;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-brand-600 px-6 py-3 text-sm font-semibold text-brand-400 transition-all hover:bg-brand-600 hover:text-on-brand md:text-base;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-brand-900 px-6 py-3 text-sm font-semibold text-gray-200 transition-all hover:border-brand-700 hover:bg-white/5 md:text-base;
   }
 
-  /* Lien avec effet */
+  /* Lien d'évitement clavier : visible uniquement au focus */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[60] focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:font-semibold focus:text-on-brand;
+  }
+
   .link-hover {
-    @apply text-gray-400 hover:text-blue-500 transition-colors duration-300;
+    @apply text-gray-400 transition-colors duration-300 hover:text-brand-400;
   }
 }
 
-/* Sélection de texte */
 ::selection {
-  @apply bg-blue-600/30 text-white;
+  @apply bg-brand-600/40 text-white;
 }

@@ -1,153 +1,188 @@
-import Navbar from '@/components/Navbar'
+'use client'
+
 import Link from 'next/link'
+import { useLang } from '@/lib/i18n'
+import { person, ui } from '@/lib/site'
+import CvLink from '@/components/CvLink'
+import { ArrowIcon, GithubIcon, GridIcon, LinkedinIcon, MailIcon, PhoneIcon } from '@/components/Icons'
+
+const stack = ['Python', 'PyTorch', 'YOLO', 'scikit-learn', 'LightGBM', 'spaCy', 'FastAPI', 'Docker', 'MLflow']
+
+const expertise = [
+  {
+    title: { fr: 'Vision par ordinateur', en: 'Computer vision' },
+    body: {
+      fr: "Détection d'objets, classification d'images, cartes de saillance.",
+      en: 'Object detection, image classification, saliency maps.',
+    },
+  },
+  {
+    title: { fr: 'Machine learning', en: 'Machine learning' },
+    body: {
+      fr: 'Modèles prédictifs, scoring, données déséquilibrées.',
+      en: 'Predictive models, scoring, imbalanced data.',
+    },
+  },
+  {
+    title: { fr: 'NLP & séries temporelles', en: 'NLP & time series' },
+    body: {
+      fr: 'Analyse de sentiments, classification de textes, prévision.',
+      en: 'Sentiment analysis, text classification, forecasting.',
+    },
+  },
+  {
+    title: { fr: 'MLOps', en: 'MLOps' },
+    body: {
+      fr: 'API, conteneurs, versionnage des modèles, intégration continue.',
+      en: 'APIs, containers, model versioning, continuous integration.',
+    },
+  },
+]
 
 export default function Home() {
+  const { t, lang } = useLang()
+
+  const stats = [
+    {
+      value: { fr: '6 mois', en: '6 months' },
+      label: { fr: 'en R&D chez LYNK, de la donnée au déploiement', en: 'in R&D at LYNK, from data to deployment' },
+    },
+    { value: '8', label: { fr: 'projets IA documentés', en: 'documented AI projects' } },
+    { value: '3ᵉ', label: { fr: 'national — Défi IA ESA-Ariel', en: 'nationally — ESA-Ariel AI Challenge' } },
+  ]
+
+  const contacts = [
+    { icon: MailIcon, label: person.email, href: `mailto:${person.email}` },
+    { icon: PhoneIcon, label: person.phones[0].label, href: person.phones[0].href },
+    { icon: LinkedinIcon, label: 'ambroisekoffi', href: person.linkedin },
+    { icon: GithubIcon, label: 'sabio27', href: person.github },
+  ]
+
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-16">
-        {/* Particules d'arrière-plan animées */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-1/4 w-2 h-2 bg-blue-400/30 rounded-full animate-[float_6s_ease-in-out_infinite]"></div>
-          <div className="absolute top-40 right-1/3 w-1 h-1 bg-cyan-400/40 rounded-full animate-[float_8s_ease-in-out_infinite_1s]"></div>
-          <div className="absolute bottom-32 left-1/3 w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-[float_10s_ease-in-out_infinite_2s]"></div>
-          <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-cyan-300/40 rounded-full animate-[float_6s_ease-in-out_infinite]"></div>
-        </div>
-
-        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-12 relative">
-          <div className="max-w-7xl w-full">
-            <div className="grid lg:grid-cols-5 gap-8 md:gap-12 items-center">
-              
-              {/* Photo - Prend 2 colonnes sur desktop */}
-              <div className="lg:col-span-2 order-2 lg:order-1">
-                <div className="relative max-w-sm mx-auto px-4">
-                  {/* Photo principale circulaire */}
-                  <div className="relative z-10 group">
-                    {/* Cercle de bordure animé gradient */}
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 animate-pulse"></div>
-                    
-                    {/* Cercle intermédiaire pour créer l'effet de bordure */}
-                    <div className="absolute inset-2 rounded-full bg-gray-900"></div>
-                    
-                    {/* Conteneur de l'image circulaire */}
-                    <div className="relative w-full aspect-square rounded-full overflow-hidden border-8 border-gray-900 shadow-2xl shadow-blue-600/50 group-hover:shadow-blue-500/70 transition-all duration-500">
-                      <img 
-                        src="/phot1.png" 
-                        alt="Koffi Ambroise - Ingénieur IA & Data Science"
-                        className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                      />
-                      
-                      {/* Overlay gradient subtil */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-cyan-600/20 opacity-50 group-hover:opacity-0 transition-opacity duration-500"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Cercles décoratifs en arrière-plan */}
-                  <div className="absolute -z-10 top-0 left-0 w-full h-full">
-                    <div className="absolute top-1/4 -right-12 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-1/4 -left-12 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl animate-pulse [animation-delay:1s]"></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Texte - Prend 3 colonnes sur desktop */}
-              <div className="lg:col-span-3 order-1 lg:order-2 space-y-4 md:space-y-6">
-                {/* Badge de statut */}
-                <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-blue-900/40 to-cyan-900/30 border-2 border-blue-600/50 rounded-full backdrop-blur-sm hover:border-blue-500/70 transition-all">
-                  <span className="relative flex h-2 w-2 md:h-3 md:w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-full w-full bg-green-500 shadow-lg shadow-green-500/50"></span>
-                  </span>
-                  <span className="text-xs md:text-sm font-semibold text-gray-200">
-                    Disponible pour un stage de 6 mois
-                  </span>
-                </div>
-
-                {/* Titre principal */}
-                <div className="space-y-3 md:space-y-4">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-                    <span className="text-gray-200 block mb-2 md:mb-3">Bonjour, je suis</span>
-                    <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-cyan-400 bg-clip-text text-transparent inline-block">
-                      Koffi K. Ambroise
-                    </span>
-                  </h1>
-
-                  {/* Sous-titre */}
-                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-100 leading-snug">
-                    Ingénieur IA & Data Science
-                  </h2>
-                </div>
-
-                {/* Description */}
-                <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl">
-                  Ingénieur en formation, spécialisé en <span className="text-blue-400 font-semibold">IA</span>, <span className="text-blue-400 font-semibold">Data Science</span> et <span className="text-blue-400 font-semibold">IoT</span>. 
-                  Passionné par l'apprentissage profond, le traitement du langage naturel, 
-                  la conception de systèmes connectés et le développement de solutions innovantes 
-                  basées sur les données et l'<span className="text-blue-400 font-semibold">HPC</span>.
-                </p>
-
-                {/* Boutons */}
-                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2">
-                  <Link 
-                    href="/projects" 
-                    className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105 text-center overflow-hidden text-sm md:text-base"
-                  >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                      </svg>
-                      Voir mes projets
-                    </span>
-                  </Link>
-                  
-                  <Link 
-                    href="/contact" 
-                    className="border-2 border-blue-600 text-blue-400 hover:bg-blue-600 hover:text-white px-6 md:px-8 py-3 md:py-3.5 rounded-xl font-semibold transition-all text-center text-sm md:text-base"
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                      Me contacter
-                    </span>
-                  </Link>
-                </div>
-
-                {/* Statistiques */}
-                <div className="grid grid-cols-3 gap-3 md:gap-4 lg:gap-6 pt-6 md:pt-10 border-t-2 border-blue-800/40">
-                  <div className="text-center bg-gradient-to-br from-blue-900/30 to-blue-800/10 p-3 md:p-5 lg:p-6 rounded-xl md:rounded-2xl border-2 border-blue-700/30 hover:border-blue-600/60 transition-all">
-                    <div className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2 md:mb-3">
-                      2+
-                    </div>
-                    <div className="text-[10px] sm:text-xs md:text-sm text-gray-300 font-semibold leading-tight">
-                      Années d'études spécialisées
-                    </div>
-                  </div>
-                  
-                  <div className="text-center bg-gradient-to-br from-blue-900/30 to-blue-800/10 p-3 md:p-5 lg:p-6 rounded-xl md:rounded-2xl border-2 border-blue-700/30 hover:border-blue-600/60 transition-all">
-                    <div className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2 md:mb-3">
-                      10+
-                    </div>
-                    <div className="text-[10px] sm:text-xs md:text-sm text-gray-300 font-semibold leading-tight">
-                      Projets réalisés
-                    </div>
-                  </div>
-                  
-                  <div className="text-center bg-gradient-to-br from-blue-900/30 to-blue-800/10 p-3 md:p-5 lg:p-6 rounded-xl md:rounded-2xl border-2 border-blue-700/30 hover:border-blue-600/60 transition-all">
-                    <div className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-br from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2 md:mb-3">
-                      6
-                    </div>
-                    <div className="text-[10px] sm:text-xs md:text-sm text-gray-300 font-semibold leading-tight">
-                      Certifications
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div className="container-page flex min-h-[calc(100vh-4rem)] items-center py-12 md:py-16">
+      <div className="w-full">
+        <div className="grid items-center gap-10 lg:grid-cols-5 lg:gap-14">
+          {/* Photo */}
+          <div className="order-1 lg:order-1 lg:col-span-2">
+            <div className="relative mx-auto w-60 sm:w-72 lg:w-full lg:max-w-sm">
+              <div className="absolute -inset-6 rounded-full bg-brand-600/20 blur-3xl" aria-hidden />
+              <img
+                src="/phot1.webp"
+                width={640}
+                height={640}
+                fetchPriority="high"
+                alt={lang === 'fr' ? 'Koffi Ambroise, ingénieur IA & Data Science' : 'Koffi Ambroise, AI & Data Science Engineer'}
+                className="relative aspect-square w-full rounded-full object-cover object-[50%_25%] shadow-2xl shadow-brand-950/60"
+              />
             </div>
           </div>
+
+          {/* Texte */}
+          <div className="order-2 space-y-6 lg:col-span-3">
+            <div className="inline-flex items-start gap-3 rounded-2xl border border-brand-600/40 bg-brand-900/30 px-4 py-2.5">
+              <span className="relative mt-1.5 flex h-2.5 w-2.5 shrink-0">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
+              </span>
+              <span className="text-sm leading-snug">
+                <span className="block font-semibold text-white">{t(ui.available)}</span>
+                <span className="block text-gray-400">{t(ui.workMode)}</span>
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl xl:text-6xl">
+                <span className="mb-2 block text-gray-200">{lang === 'fr' ? 'Bonjour, je suis' : "Hi, I'm"}</span>
+                <span className="gradient-text">{person.displayName}</span>
+              </h1>
+              <h2 className="text-xl font-semibold text-gray-100 sm:text-2xl md:text-3xl">{t(person.role)}</h2>
+            </div>
+
+            <p className="max-w-2xl text-base leading-relaxed text-gray-300 md:text-lg">
+              {lang === 'fr' ? (
+                <>
+                  Des photos de cacaoyers, des tweets, des flux de transactions : j’aime faire parler les données. Je
+                  construis des modèles de <span className="font-semibold text-brand-400">vision par ordinateur</span>, de{' '}
+                  <span className="font-semibold text-brand-400">machine learning</span> et de{' '}
+                  <span className="font-semibold text-brand-400">NLP</span>, et je veille à ce qu’ils ne restent pas
+                  dans un notebook. Mathématicien de formation, j’ai gardé un réflexe : vérifier ce que vaut vraiment
+                  un modèle avant de le mettre entre les mains de quelqu’un.
+                </>
+              ) : (
+                <>
+                  Cocoa leaves, tweets, streams of transactions: I like making data talk. I build{' '}
+                  <span className="font-semibold text-brand-400">computer vision</span>,{' '}
+                  <span className="font-semibold text-brand-400">machine learning</span> and{' '}
+                  <span className="font-semibold text-brand-400">NLP</span> models, and I make sure they don’t stay
+                  stuck in a notebook. Trained as a mathematician, I kept one habit: checking what a model is really
+                  worth before putting it in someone’s hands.
+                </>
+              )}
+            </p>
+
+            <ul className="flex flex-wrap gap-2" aria-label="Stack">
+              {stack.map((s) => (
+                <li key={s} className="chip-muted text-xs md:text-sm">{s}</li>
+              ))}
+            </ul>
+
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">
+              <Link href="/projects" className="btn-primary">
+                <GridIcon className="h-4 w-4 md:h-5 md:w-5" />
+                {t(ui.seeProjects)}
+              </Link>
+              <CvLink className="btn-secondary" />
+            </div>
+
+            {/* Contacts visibles */}
+            <ul className="grid gap-x-6 gap-y-2 pt-1 text-sm sm:grid-cols-2">
+              {contacts.map(({ icon: Icon, label, href }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    className="inline-flex min-h-[44px] items-center gap-2.5 text-gray-300 transition-colors hover:text-brand-400"
+                    {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-brand-900/50 bg-dark-900/70 text-brand-400">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </main>
+
+        {/* Chiffres clés */}
+        <div className="mt-14 grid gap-4 sm:grid-cols-3">
+          {stats.map((s) => (
+            <div key={t(s.label)} className="card card-hover p-5 text-center md:p-6">
+              <div className="metric-text mb-2 text-4xl font-extrabold md:text-5xl">{t(s.value)}</div>
+              <div className="text-sm font-medium text-gray-300">{t(s.label)}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Domaines */}
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {expertise.map((e) => (
+            <div key={t(e.title)} className="card card-hover p-5">
+              <h3 className="mb-1.5 font-bold text-white">{t(e.title)}</h3>
+              <p className="text-sm leading-relaxed text-gray-400">{t(e.body)}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
+          <Link href="/experience" className="inline-flex min-h-[44px] items-center gap-2 font-semibold text-brand-400 hover:text-brand-300">
+            {lang === 'fr' ? 'Mon expérience chez LYNK' : 'My experience at LYNK'} <ArrowIcon className="h-4 w-4" />
+          </Link>
+          <Link href="/contact" className="inline-flex min-h-[44px] items-center gap-2 font-semibold text-brand-400 hover:text-brand-300">
+            {t(ui.contactMe)} <ArrowIcon className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
