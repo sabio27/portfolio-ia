@@ -6,7 +6,7 @@ import { person, ui } from '@/lib/site'
 import CvLink from '@/components/CvLink'
 import { ArrowIcon, GithubIcon, GridIcon, LinkedinIcon, MailIcon, PhoneIcon } from '@/components/Icons'
 
-const stack = ['Python', 'PyTorch', 'YOLO', 'scikit-learn', 'LightGBM', 'spaCy', 'FastAPI', 'Docker', 'MLflow']
+const stack = ['Python', 'PyTorch', 'YOLO', 'scikit-learn', 'LightGBM', 'spaCy', 'multiprocessing', 'FastAPI', 'Docker', 'MLflow']
 
 const expertise = [
   {
@@ -31,10 +31,10 @@ const expertise = [
     },
   },
   {
-    title: { fr: 'MLOps', en: 'MLOps' },
+    title: { fr: 'MLOps & calcul parallèle', en: 'MLOps & parallel computing' },
     body: {
-      fr: 'API, conteneurs, versionnage des modèles, intégration continue.',
-      en: 'APIs, containers, model versioning, continuous integration.',
+      fr: 'API, conteneurs, versionnage des modèles, calcul réparti sur plusieurs cœurs.',
+      en: 'APIs, containers, model versioning, computation spread over several cores.',
     },
   },
 ]
@@ -47,7 +47,7 @@ export default function Home() {
       value: { fr: '6 mois', en: '6 months' },
       label: { fr: 'en R&D chez LYNK, de la donnée au déploiement', en: 'in R&D at LYNK, from data to deployment' },
     },
-    { value: '8', label: { fr: 'projets IA documentés', en: 'documented AI projects' } },
+    { value: '7', label: { fr: 'projets détaillés sur ce site', en: 'projects detailed on this site' } },
     { value: '3ᵉ', label: { fr: 'national — Défi IA ESA-Ariel', en: 'nationally — ESA-Ariel AI Challenge' } },
   ]
 
@@ -101,21 +101,21 @@ export default function Home() {
             <p className="max-w-2xl text-base leading-relaxed text-gray-300 md:text-lg">
               {lang === 'fr' ? (
                 <>
-                  Des photos de cacaoyers, des tweets, des flux de transactions : j’aime faire parler les données. Je
-                  construis des modèles de <span className="font-semibold text-brand-400">vision par ordinateur</span>, de{' '}
+                  Basé à Abidjan, j’analyse des données et je construis des modèles de{' '}
+                  <span className="font-semibold text-brand-400">vision par ordinateur</span>, de{' '}
                   <span className="font-semibold text-brand-400">machine learning</span> et de{' '}
-                  <span className="font-semibold text-brand-400">NLP</span>, et je veille à ce qu’ils ne restent pas
-                  dans un notebook. Mathématicien de formation, j’ai gardé un réflexe : vérifier ce que vaut vraiment
-                  un modèle avant de le mettre entre les mains de quelqu’un.
+                  <span className="font-semibold text-brand-400">NLP</span>, que je mets ensuite à disposition sous
+                  forme d’API ou d’applications. Quand les volumes de données l’exigent, je m’appuie sur le{' '}
+                  <span className="font-semibold text-brand-400">calcul parallèle</span>.
                 </>
               ) : (
                 <>
-                  Cocoa leaves, tweets, streams of transactions: I like making data talk. I build{' '}
+                  Based in Abidjan, I analyse data and build{' '}
                   <span className="font-semibold text-brand-400">computer vision</span>,{' '}
                   <span className="font-semibold text-brand-400">machine learning</span> and{' '}
-                  <span className="font-semibold text-brand-400">NLP</span> models, and I make sure they don’t stay
-                  stuck in a notebook. Trained as a mathematician, I kept one habit: checking what a model is really
-                  worth before putting it in someone’s hands.
+                  <span className="font-semibold text-brand-400">NLP</span> models, which I then make available as
+                  APIs or applications. When data volumes call for it, I rely on{' '}
+                  <span className="font-semibold text-brand-400">parallel computing</span>.
                 </>
               )}
             </p>

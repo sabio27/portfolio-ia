@@ -1,5 +1,5 @@
-import ProjectDetail from '@/components/ProjectDetail'
+import { redirect } from 'next/navigation'
 
 export default function Page() {
-  return <ProjectDetail slug="services-financiers" />
+  redirect('/projects')
 }

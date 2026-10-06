@@ -55,22 +55,25 @@ const eye: Project = {
   sort: 202601,
   featured: true,
   title: {
-    fr: 'Détection de maladies oculaires par deep learning',
-    en: 'Eye disease detection with deep learning',
+    fr: 'Classification de maladies oculaires sur images de fond d’œil',
+    en: 'Eye disease classification from fundus images',
   },
   short: {
-    fr: "YOLO-EyeNet et auto-encodeur convolutionnel combinés pour classer 10 classes de pathologies rétiniennes sur un jeu de données très déséquilibré. 93 % d'accuracy.",
-    en: 'YOLO-EyeNet and a convolutional autoencoder combined to classify 10 retinal conditions on a heavily imbalanced dataset. 93% accuracy.',
+    fr: "10 classes (9 maladies + œil sain) sur 5 335 images très déséquilibrées. Modèles YOLO fine-tunés : 77,5 % d'accuracy sur le test, la bonne classe dans le top 5 pour 99,6 % des images.",
+    en: '10 classes (9 diseases + healthy) on 5,335 heavily imbalanced images. Fine-tuned YOLO models: 77.5% test accuracy, with the right class in the top 5 for 99.6% of images.',
   },
   summary: {
-    fr: 'Système automatique de détection de pathologies oculaires combinant YOLO-EyeNet et un auto-encodeur convolutionnel.',
-    en: 'An automated eye disease detection system combining YOLO-EyeNet with a convolutional autoencoder.',
+    fr: 'Classer des images de fond d’œil en 10 classes, avec des maladies représentées par quelques dizaines d’images seulement.',
+    en: 'Classifying fundus images into 10 classes, some of them diseases with only a few dozen images.',
   },
   context: { fr: 'Module Deep Learning', en: 'Deep Learning module' },
   period: { fr: 'Master 2 · janvier 2026', en: "Master's year 2 · January 2026" },
-  meta: [{ fr: 'Encadré par Dr. Ayikpa', en: 'Supervised by Dr. Ayikpa' }],
+  meta: [
+    { fr: 'Projet en binôme', en: 'Pair project' },
+    { fr: 'Encadré par Dr. Ayikpa', en: 'Supervised by Dr. Ayikpa' },
+  ],
   domains: ['vision', 'ml'],
-  tech: ['Python', 'PyTorch', 'YOLOv11', 'YOLOv8', 'OpenCV', 'NumPy', 'Pandas', 'scikit-learn'],
+  tech: ['Python', 'PyTorch', 'YOLO11', 'YOLOv8', 'OpenCV', 'Albumentations', 'scikit-learn'],
   sections: [
     {
       title: { fr: 'Contexte', en: 'Context' },
@@ -78,108 +81,75 @@ const eye: Project = {
         {
           type: 'text',
           body: {
-            fr: "Les maladies oculaires sont un enjeu majeur de santé publique. Détectées tard, elles entraînent des pertes de vision sévères et irréversibles. L'accès limité aux ophtalmologistes, en particulier dans les pays en développement, rend les systèmes de dépistage automatisé d'autant plus utiles.",
-            en: 'Eye diseases are a major public health issue. Detected late, they cause severe and irreversible vision loss. Limited access to ophthalmologists, especially in developing countries, makes automated screening systems all the more valuable.',
+            fr: "Beaucoup de maladies de l'œil passent inaperçues au début, et quand on les découvre, une partie de la vue est déjà perdue. Là où les ophtalmologistes manquent, un outil qui trie les images de fond d'œil pourrait aider à repérer plus tôt les cas à examiner.",
+            en: 'Many eye diseases go unnoticed at first, and by the time they are found, some sight is already lost. Where ophthalmologists are scarce, a tool that sorts fundus images could help flag the cases to examine sooner.',
           },
         },
         {
           type: 'question',
           body: {
-            fr: "Comment détecter automatiquement 9 pathologies oculaires à partir d'images rétiniennes, avec un jeu de données déséquilibré dans un rapport de 88 pour 1 ?",
-            en: 'How can we automatically detect 9 eye conditions from retinal images when the dataset is imbalanced by a ratio of 88 to 1?',
+            fr: "Peut-on reconnaître 9 maladies de l'œil à partir d'une photo de la rétine, quand la classe la plus fournie compte 89 fois plus d'images que la plus rare ?",
+            en: 'Can 9 eye diseases be recognised from a photo of the retina when the largest class has 89 times more images than the rarest?',
           },
-        },
-        {
-          type: 'lists',
-          columns: [
-            {
-              title: { fr: 'Objectifs', en: 'Goals' },
-              items: [
-                { fr: 'Identifier 10 classes (9 pathologies + sain)', en: 'Identify 10 classes (9 conditions + healthy)' },
-                { fr: 'Classification rapide avec YOLO-EyeNet', en: 'Fast classification with YOLO-EyeNet' },
-                { fr: "Détection d'anomalies par auto-encodeur", en: 'Anomaly detection with an autoencoder' },
-                { fr: 'Fusion des embeddings pour gagner en performance', en: 'Embedding fusion to improve performance' },
-              ],
-            },
-            {
-              title: { fr: 'Difficultés', en: 'Challenges' },
-              items: [
-                { fr: 'Déséquilibre extrême : 88:1', en: 'Extreme imbalance: 88:1' },
-                { fr: 'Classes très rares (Pterygium : 17 images)', en: 'Very rare classes (Pterygium: 17 images)' },
-                { fr: 'Exigence de fiabilité clinique', en: 'Clinical-grade reliability required' },
-                { fr: "Détection d'anomalies sans supervision", en: 'Unsupervised anomaly detection' },
-              ],
-            },
-          ],
         },
       ],
     },
     {
-      title: { fr: 'Données et prétraitement', en: 'Data and preprocessing' },
+      title: { fr: 'Données et préparation', en: 'Data and preparation' },
       blocks: [
         {
           type: 'stats',
           items: [
-            { value: '5 335', label: { fr: 'images rétiniennes RGB', en: 'RGB retinal images' }, note: '2004 × 1690 px' },
-            { value: '10', label: { fr: 'classes', en: 'classes' }, note: { fr: '9 pathologies + sain', en: '9 conditions + healthy' } },
-            { value: '88:1', label: { fr: 'ratio de déséquilibre', en: 'imbalance ratio' } },
+            { value: '5 335', label: { fr: 'images de fond d’œil', en: 'fundus images' }, note: { fr: 'deux hôpitaux du Bangladesh', en: 'two hospitals in Bangladesh' } },
+            { value: '10', label: { fr: 'classes', en: 'classes' }, note: { fr: '9 maladies + œil sain', en: '9 diseases + healthy' } },
+            { value: '17', label: { fr: 'images de ptérygion', en: 'pterygium images' }, note: { fr: 'contre 1 509 de rétinopathie diabétique', en: 'vs 1,509 of diabetic retinopathy' } },
           ],
         },
         {
-          type: 'lists',
-          columns: [
-            {
-              title: { fr: 'Transformations', en: 'Transforms' },
-              items: [
-                { fr: 'Redimensionnement : 640×640 (YOLO) / 224×224 (AE)', en: 'Resize: 640×640 (YOLO) / 224×224 (AE)' },
-                { fr: 'CLAHE pour le contraste', en: 'CLAHE for contrast' },
-                { fr: 'Normalisation des pixels : [0, 255] → [0, 1]', en: 'Pixel scaling: [0, 255] → [0, 1]' },
-              ],
-            },
-            {
-              title: { fr: 'Augmentation ciblée', en: 'Targeted augmentation' },
-              items: [
-                { fr: 'Rotation ±15°, flips H/V, zoom ±10 %', en: 'Rotation ±15°, H/V flips, zoom ±10%' },
-                { fr: 'Ajustements HSV (H 0.015, S 0.7, V 0.4)', en: 'HSV jitter (H 0.015, S 0.7, V 0.4)' },
-                { fr: 'Augmentation ×3 à ×5 sur les classes rares', en: '×3 to ×5 augmentation on rare classes' },
-              ],
-            },
+          type: 'steps',
+          items: [
+            { title: { fr: 'Découpage', en: 'Split' }, body: { fr: '70 / 15 / 15 par classe (train, validation, test), fait sur les images d’origine avant tout le reste.', en: '70 / 15 / 15 per class (train, validation, test), done on the original images before anything else.' } },
+            { title: { fr: 'Prétraitement', en: 'Preprocessing' }, body: { fr: 'Redimensionnement en 640×640 et CLAHE sur la luminance, pour égaliser des images très inégalement éclairées.', en: 'Resized to 640×640, then CLAHE on the luminance to even out very uneven lighting.' } },
+            { title: { fr: 'Augmentation', en: 'Augmentation' }, body: { fr: 'Sur le train seulement, et d’autant plus forte que la classe est rare : ×50 pour le ptérygion, ×10 à ×12 pour d’autres, rien pour les trois plus grandes. Le train passe de 3 729 à 8 262 images.', en: 'On the training set only, stronger for rarer classes: ×50 for pterygium, ×10 to ×12 for others, none for the three largest. Training goes from 3,729 to 8,262 images.' } },
           ],
         },
       ],
     },
     {
-      title: { fr: 'Architecture hybride', en: 'Hybrid architecture' },
+      title: { fr: 'Modèles', en: 'Models' },
       blocks: [
         {
           type: 'defs',
           items: [
             {
+              term: 'YOLOv8s-cls / YOLO11s-cls',
+              desc: {
+                fr: 'Modèles de classification pré-entraînés, fine-tunés avec les réglages par défaut (images 224×224).',
+                en: 'Pre-trained classification models, fine-tuned with default settings (224×224 images).',
+              },
+            },
+            {
               term: 'YOLO-EyeNet',
               desc: {
-                fr: 'Basé sur YOLOv11s, ajusté pour les pathologies rétiniennes : 80 epochs, learning rate 0.005, AdamW. 47 couches, 5,45 M de paramètres, 13,5 ms par image, top-1 à 77,41 %.',
-                en: 'Built on YOLOv11s and tuned for retinal conditions: 80 epochs, learning rate 0.005, AdamW. 47 layers, 5.45M parameters, 13.5 ms per image, 77.41% top-1.',
+                fr: 'YOLO11s-cls entraîné plus longtemps (jusqu’à 80 époques), avec un learning rate plus bas, AdamW et du dropout.',
+                en: 'YOLO11s-cls trained longer (up to 80 epochs), with a lower learning rate, AdamW and dropout.',
               },
             },
             {
               term: { fr: 'Auto-encodeur convolutionnel', en: 'Convolutional autoencoder' },
               desc: {
-                fr: "Entraîné sur 4 classes (rétinopathie diabétique, glaucome, sain, myopie) pour apprendre la distribution normale et repérer les anomalies. Encodeur 5 Conv2d → espace latent 512-d, décodeur 5 ConvTranspose2d, perte MSE + SSIM + CE×0.1.",
-                en: 'Trained on 4 classes (diabetic retinopathy, glaucoma, healthy, myopia) to learn the normal distribution and flag anomalies. Encoder 5 Conv2d → 512-d latent space, decoder 5 ConvTranspose2d, loss MSE + SSIM + CE×0.1.',
+                fr: "Entraîné sur les 4 classes les plus fournies, avec une perte MSE + SSIM et un petit terme de classification sur l'espace latent (512 dimensions).",
+                en: 'Trained on the 4 largest classes, with an MSE + SSIM loss and a small classification term on the 512-dimension latent space.',
               },
             },
             {
-              term: { fr: 'Fusion YOLO + AE (MLP)', en: 'YOLO + AE fusion (MLP)' },
+              term: { fr: 'Fusion', en: 'Fusion' },
               desc: {
-                fr: 'Concaténation des embeddings YOLO (25 088-d) et AE (512-d), soit 25 600-d, puis classification finale sur 10 classes.',
-                en: 'YOLO embeddings (25,088-d) and AE embeddings (512-d) are concatenated into 25,600-d, then classified into 10 classes.',
+                fr: "Un MLP sur les représentations de YOLO-EyeNet et de l'auto-encodeur mises bout à bout : entraîné sur le train, époque choisie sur la validation.",
+                en: 'An MLP on the YOLO-EyeNet and autoencoder representations put side by side: trained on the training set, epoch chosen on validation.',
               },
             },
           ],
-        },
-        {
-          type: 'code',
-          body: 'Linear(25600 → 1024) + ReLU + Dropout(0.3)\nLinear(1024 → 256)   + ReLU + Dropout(0.3)\nLinear(256 → 10)     → Softmax',
         },
       ],
     },
@@ -189,64 +159,68 @@ const eye: Project = {
         {
           type: 'stats',
           items: [
-            { value: '93 %', label: { fr: 'accuracy globale', en: 'overall accuracy' }, note: { fr: '+15,2 pts vs YOLO seul', en: '+15.2 pts vs YOLO alone' } },
-            { value: '0,94', label: { fr: 'F1 macro', en: 'macro F1' } },
-            { value: '100 %', label: { fr: 'sur les classes rares', en: 'on rare classes' }, note: 'Pterygium, Retinal Det.' },
-            { value: '6,8 %', label: { fr: "taux d'erreur", en: 'error rate' }, note: { fr: '55 images sur 810', en: '55 of 810 images' } },
+            { value: '77,5 %', label: { fr: 'accuracy sur le test', en: 'test accuracy' }, note: { fr: 'YOLO-EyeNet, 810 images', en: 'YOLO-EyeNet, 810 images' } },
+            { value: '99,6 %', label: { fr: 'top-5', en: 'top-5' } },
+            { value: '0,77', label: { fr: 'F1 macro', en: 'macro F1' } },
           ],
         },
         {
           type: 'table',
-          head: [{ fr: 'Classe', en: 'Class' }, 'F1'],
+          head: [{ fr: 'Modèle', en: 'Model' }, 'Accuracy'],
           rows: [
-            ['Pterygium', '1.00'],
-            ['Retinal Detachment', '1.00'],
-            ['Diabetic Retinopathy', '0.98'],
-            ['Retinitis Pigmentosa', '0.98'],
-            ['Macular Scar', '0.92'],
-            ['Glaucoma', '0.91'],
-            ['Healthy', '0.91'],
-            ['CSC', '0.90'],
+            ['YOLOv8s-cls', '77,8 %'],
+            ['YOLO11s-cls', '77,3 %'],
+            ['YOLO-EyeNet', '77,5 %'],
+            [{ fr: 'Fusion YOLO-EyeNet + auto-encodeur', en: 'YOLO-EyeNet + autoencoder fusion' }, '72,5 %'],
           ],
+          highlight: 2,
+          note: {
+            fr: "Les trois YOLO se tiennent à moins d'un point. Ajouter l'auto-encodeur n'aide pas : ses représentations seules ne donnent que 52 %.",
+            en: 'The three YOLO models are within a point of each other. Adding the autoencoder does not help: its representations alone only reach 52%.',
+          },
+        },
+        {
+          type: 'table',
+          head: [{ fr: 'Classe', en: 'Class' }, { fr: 'F1 (YOLO-EyeNet)', en: 'F1 (YOLO-EyeNet)' }],
+          rows: [
+            [{ fr: 'Ptérygion (4 images de test)', en: 'Pterygium (4 test images)' }, '1.00'],
+            [{ fr: 'Rétinopathie diabétique', en: 'Diabetic retinopathy' }, '0.92'],
+            [{ fr: 'Décollement de rétine', en: 'Retinal detachment' }, '0.91'],
+            [{ fr: 'Rétinite pigmentaire', en: 'Retinitis pigmentosa' }, '0.91'],
+            [{ fr: 'Œil sain', en: 'Healthy' }, '0.77'],
+            [{ fr: 'Cicatrice maculaire', en: 'Macular scar' }, '0.75'],
+            [{ fr: 'Œdème papillaire', en: 'Disc edema' }, '0.75'],
+            [{ fr: 'Glaucome', en: 'Glaucoma' }, '0.70'],
+            [{ fr: 'Myopie', en: 'Myopia' }, '0.54'],
+            [{ fr: 'Choriorétinopathie séreuse centrale', en: 'Central serous chorioretinopathy' }, '0.47'],
+          ],
+          note: {
+            fr: "La plupart des erreurs mélangent glaucome, myopie et œil sain, trois cas qui se jugent surtout sur l'aspect du disque optique.",
+            en: 'Most errors mix up glaucoma, myopia and healthy eyes, three cases judged mostly on the look of the optic disc.',
+          },
         },
         {
           type: 'text',
           body: {
-            fr: "27 cas atypiques ont été repérés automatiquement grâce à une erreur de reconstruction élevée (MSE au-delà du 99e percentile).",
-            en: '27 atypical cases were flagged automatically through high reconstruction error (MSE above the 99th percentile).',
+            fr: "L'auto-encodeur, qui n'a vu que 4 classes, reconstruit très mal les images de ptérygion (erreur moyenne 0,015 contre environ 0,002) : le ptérygion touche la surface de l'œil, pas la rétine. Pour les autres maladies qu'il n'a pas vues, l'écart est faible, donc l'erreur de reconstruction seule ne suffit pas à signaler un cas rare.",
+            en: 'The autoencoder, which only saw 4 classes, reconstructs pterygium images very poorly (mean error 0.015 vs about 0.002): pterygium affects the surface of the eye, not the retina. For the other unseen diseases the gap is small, so reconstruction error alone is not enough to flag a rare case.',
           },
         },
       ],
     },
     {
-      title: { fr: 'Ce que je retiens', en: 'Takeaways' },
+      title: { fr: 'Pistes', en: 'Next steps' },
       blocks: [
-        {
-          type: 'text',
-          body: {
-            fr: "Combiner une classification rapide (YOLO, caractéristiques locales) et une représentation latente (auto-encodeur, structure globale) permet d'atteindre 93 % d'accuracy malgré un déséquilibre extrême. La fusion apporte +15,2 points par rapport à YOLO seul. Côté usage, le modèle pourrait servir d'aide au tri pour les ophtalmologistes et au dépistage dans les zones mal desservies, avec une inférence en temps réel.",
-            en: 'Pairing fast classification (YOLO, local features) with a latent representation (autoencoder, global structure) reaches 93% accuracy despite extreme imbalance. Fusion adds 15.2 points over YOLO alone. In practice, the model could help ophthalmologists triage cases and support screening in underserved areas, with real-time inference.',
-          },
-        },
         {
           type: 'lists',
           columns: [
             {
-              title: { fr: 'Livrables', en: 'Deliverables' },
+              title: { fr: 'Pour aller plus loin', en: 'Going further' },
               items: [
-                { fr: '3 modèles YOLO (v8, v11, EyeNet)', en: '3 YOLO models (v8, v11, EyeNet)' },
-                { fr: "Auto-encodeur + détecteur d'anomalies", en: 'Autoencoder + anomaly detector' },
-                { fr: 'Modèle de fusion MLP (93 %)', en: 'MLP fusion model (93%)' },
-                { fr: 'Rapport technique (14 pages) et soutenance', en: 'Technical report (14 pages) and defence' },
-              ],
-            },
-            {
-              title: { fr: 'Pistes', en: 'Next steps' },
-              items: [
-                { fr: "Grad-CAM pour l'interprétabilité clinique", en: 'Grad-CAM for clinical interpretability' },
-                { fr: 'Validation externe (ODIR, Kaggle DR)', en: 'External validation (ODIR, Kaggle DR)' },
-                { fr: 'Annotations de localisation pour le mAP', en: 'Localisation labels to compute mAP' },
-                { fr: 'Déploiement en dépistage temps réel', en: 'Real-time screening deployment' },
+                { fr: 'Entraîner en 384 ou 512 px : à 224 px, les détails du disque optique se perdent', en: 'Train at 384 or 512 px: at 224 px, optic disc details get lost' },
+                { fr: 'Comparer avec un EfficientNet ou un ConvNeXt pré-entraîné', en: 'Compare with a pre-trained EfficientNet or ConvNeXt' },
+                { fr: 'Pondérer les classes dans la perte', en: 'Weight the classes in the loss' },
+                { fr: 'Grad-CAM pour voir où regarde le modèle', en: 'Grad-CAM to see where the model looks' },
               ],
             },
           ],
@@ -261,21 +235,21 @@ const fraud: Project = {
   sort: 202512,
   featured: true,
   title: {
-    fr: 'Détection de fraude Mobile Money par système multi-agents parallèle',
-    en: 'Mobile Money fraud detection with a parallel multi-agent system',
+    fr: 'Détection de fraude Mobile Money par agents parallèles',
+    en: 'Mobile Money fraud detection with parallel agents',
   },
   short: {
-    fr: 'Simulation inspirée d’Orange Money, Wave et MTN MoMo : détecteurs parallèles contre fraudeurs qui apprennent par Q-Learning. 98,5 % de détection, 0 faux positif, speedup ×3,5.',
-    en: 'A simulation inspired by Orange Money, Wave and MTN MoMo: parallel detectors versus fraudsters that learn with Q-Learning. 98.5% detection, zero false positives, 3.5× speedup.',
+    fr: 'Simulation de transactions Mobile Money : des fraudeurs qui apprennent (Q-Learning) face à des détecteurs qui tournent en parallèle. 98,4 % des fraudes détectées sans bloquer un seul client, ×4,3 plus rapide sur 6 cœurs.',
+    en: 'A Mobile Money transaction simulation: fraudsters that learn (Q-Learning) against detectors running in parallel. 98.4% of frauds caught without blocking a single client, 4.3× faster on 6 cores.',
   },
   summary: {
-    fr: 'Système parallèle de détection de fraude inspiré du Mobile Money africain (Orange Money, Wave, MTN MoMo), avec des agents fraudeurs qui s’adaptent par Q-Learning.',
-    en: 'A parallel fraud detection system inspired by African Mobile Money (Orange Money, Wave, MTN MoMo), with fraudster agents that adapt through Q-Learning.',
+    fr: 'Simuler un flux de paiements mobiles en FCFA, avec des fraudeurs qui changent de technique quand ils se font prendre, et le répartir entre plusieurs processus détecteurs.',
+    en: 'Simulating a stream of mobile payments in FCFA, with fraudsters that change technique when caught, and splitting it across several detector processes.',
   },
   context: { fr: 'Architecture et algorithmes parallèles', en: 'Parallel architectures & algorithms' },
   period: { fr: 'Master 2 · 2025–2026', en: "Master's year 2 · 2025–2026" },
   domains: ['hpc', 'ml'],
-  tech: ['Python', 'multiprocessing', 'Q-Learning', 'SQLite', 'PRAM CREW', 'Matplotlib'],
+  tech: ['Python', 'multiprocessing', 'Q-Learning', 'SQLite', 'Streamlit', 'Docker'],
   sections: [
     {
       title: { fr: 'Contexte', en: 'Context' },
@@ -286,17 +260,19 @@ const fraud: Project = {
             {
               title: { fr: 'Le problème', en: 'The problem' },
               items: [
-                { fr: 'Le Mobile Money génère des millions de transactions par jour en Afrique', en: 'Mobile Money generates millions of transactions a day across Africa' },
-                { fr: 'La fraude évolue en temps réel : usurpation, fragmentation, round-tripping…', en: 'Fraud evolves in real time: identity theft, structuring, round-tripping…' },
-                { fr: "Un détecteur unique devient un goulot d'étranglement", en: 'A single detector becomes a bottleneck' },
+                { fr: 'Une grande partie des paiements en Côte d’Ivoire passe par le Mobile Money', en: 'A large share of payments in Côte d’Ivoire goes through Mobile Money' },
+                { fr: 'Il faut décider en temps réel, sur de gros volumes', en: 'Decisions must be made in real time, on large volumes' },
+                { fr: 'Les fraudeurs s’adaptent : une technique bloquée est vite remplacée', en: 'Fraudsters adapt: a blocked technique is quickly replaced' },
+                { fr: 'Bloquer un vrai client coûte aussi cher qu’une fraude ratée', en: 'Blocking a real client costs as much as a missed fraud' },
               ],
             },
             {
-              title: { fr: 'La réponse', en: 'The approach' },
+              title: { fr: 'Ce que fait la simulation', en: 'What the simulation does' },
               items: [
-                { fr: 'Système multi-agents exécuté en parallèle sur N cœurs', en: 'A multi-agent system running in parallel on N cores' },
-                { fr: 'Agents fraudeurs adaptatifs (Q-Learning)', en: 'Adaptive fraudster agents (Q-Learning)' },
-                { fr: 'Base SQLite persistante entre simulations', en: 'SQLite store persisted across simulations' },
+                { fr: 'Clients normaux et fraudeurs génèrent chaque tour un flux mélangé', en: 'Normal clients and fraudsters produce a mixed stream each round' },
+                { fr: 'Le flux est découpé entre plusieurs processus détecteurs', en: 'The stream is split between several detector processes' },
+                { fr: 'Les fraudeurs apprennent de leurs échecs (Q-Learning)', en: 'Fraudsters learn from their failures (Q-Learning)' },
+                { fr: 'SQLite garde l’historique d’une simulation à l’autre', en: 'SQLite keeps the history from one simulation to the next' },
               ],
             },
           ],
@@ -304,32 +280,31 @@ const fraud: Project = {
         {
           type: 'stats',
           items: [
-            { value: '98,5 %', label: { fr: 'taux de détection', en: 'detection rate' } },
-            { value: '0 %', label: { fr: 'faux positifs', en: 'false positives' } },
-            { value: '×3,5', label: { fr: 'speedup parallèle', en: 'parallel speedup' } },
+            { value: '98,4 %', label: { fr: 'des fraudes détectées', en: 'of frauds caught' }, note: { fr: '49 319 sur 50 134', en: '49,319 of 50,134' } },
+            { value: '0', label: { fr: 'client bloqué à tort', en: 'clients wrongly blocked' } },
+            { value: '×4,3', label: { fr: 'speedup sur 6 cœurs', en: 'speedup on 6 cores' } },
             { value: '10', label: { fr: 'stratégies de fraude', en: 'fraud strategies' } },
           ],
         },
       ],
     },
     {
-      title: { fr: 'Architecture', en: 'Architecture' },
+      title: { fr: 'Les agents', en: 'The agents' },
       blocks: [
         {
           type: 'defs',
           items: [
-            { term: { fr: 'Agent client', en: 'Client agent' }, desc: { fr: 'Génère des transactions légitimes avec un profil stable.', en: 'Generates legitimate transactions with a stable profile.' } },
-            { term: { fr: 'Agent fraudeur', en: 'Fraudster agent' }, desc: { fr: '10 stratégies, Q-Learning epsilon-greedy : il apprend à contourner le système.', en: '10 strategies, epsilon-greedy Q-Learning: it learns to evade the system.' } },
-            { term: { fr: 'Agent détecteur', en: 'Detector agent' }, desc: { fr: 'Analyse en parallèle avec 10 règles métier calibrées et un pool de processus persistant.', en: 'Analyses in parallel with 10 calibrated business rules and a persistent process pool.' } },
-            { term: { fr: 'Superviseur', en: 'Supervisor' }, desc: { fr: 'Coordination centrale : collecte des décisions, détection des identifiants dupliqués.', en: 'Central coordination: collects decisions, detects duplicate IDs.' } },
-            { term: { fr: 'Base SQLite', en: 'SQLite store' }, desc: { fr: 'Persistance entre simulations : profils clients, historique des fraudes.', en: 'Persistence across simulations: client profiles, fraud history.' } },
+            { term: { fr: 'Client', en: 'Client' }, desc: { fr: 'Fait des paiements ordinaires, avec ses habitudes de montant, d’heure et de ville.', en: 'Makes ordinary payments, with his own habits of amount, time and city.' } },
+            { term: { fr: 'Fraudeur', en: 'Fraudster' }, desc: { fr: 'Choisit parmi 10 stratégies et privilégie celles qui passent (Q-Learning, 20 % d’exploration).', en: 'Picks among 10 strategies and favours the ones that get through (Q-Learning, 20% exploration).' } },
+            { term: { fr: 'Détecteur', en: 'Detector' }, desc: { fr: 'Donne à chaque transaction un score de risque de 0 à 100 à partir de 10 règles. Un détecteur par processus.', en: 'Gives each transaction a risk score from 0 to 100 based on 10 rules. One detector per process.' } },
+            { term: { fr: 'Superviseur', en: 'Supervisor' }, desc: { fr: 'Rassemble les décisions, calcule les indicateurs et fait apprendre les fraudeurs.', en: 'Collects the decisions, computes the metrics and lets the fraudsters learn.' } },
           ],
         },
         {
           type: 'text',
           body: {
-            fr: 'Modèle PRAM CREW (lecture concurrente, écriture exclusive) : plusieurs détecteurs lisent les transactions en même temps, le processus principal agrège les résultats. Implémentation avec un multiprocessing.Pool persistant (fork() sous Linux, spawn() sous Windows).',
-            en: 'PRAM CREW model (concurrent read, exclusive write): several detectors read transactions at once, and the main process aggregates the results. Implemented with a persistent multiprocessing.Pool (fork() on Linux, spawn() on Windows).',
+            fr: "Chaque processus travaille sur sa part des transactions et seul le processus principal regroupe les résultats (lecture concurrente, écriture exclusive, le modèle CREW vu en cours). Le pool de processus est créé une fois pour toute la simulation : le relancer à chaque tour coûterait plus cher que l'analyse.",
+            en: 'Each process works on its share of the transactions and only the main process gathers the results (concurrent read, exclusive write: the CREW model from the course). The process pool is created once for the whole simulation; restarting it every round would cost more than the analysis.',
           },
         },
       ],
@@ -341,24 +316,24 @@ const fraud: Project = {
           type: 'defs',
           mono: true,
           items: [
-            { term: 'montant_explosif', desc: { fr: 'Virement énorme et inhabituel', en: 'Huge, unusual transfer' } },
-            { term: 'fragmentation', desc: { fr: 'Découpage en petites transactions', en: 'Split into small transactions' } },
-            { term: 'usurpation', desc: { fr: "Copie du profil d'un client", en: "Copies a real client's profile" } },
-            { term: 'rapidite', desc: { fr: 'Très haute fréquence de transactions', en: 'Very high transaction frequency' } },
-            { term: 'localisation', desc: { fr: 'Ville géographiquement impossible', en: 'Geographically impossible city' } },
-            { term: 'compte_dormant', desc: { fr: 'Compte inactif soudain actif', en: 'Dormant account suddenly active' } },
-            { term: 'micro_transactions', desc: { fr: 'Milliers de petits prélèvements', en: 'Thousands of tiny debits' } },
-            { term: 'horaires_suspects', desc: { fr: 'Transactions entre 0 h et 4 h', en: 'Transactions between midnight and 4 a.m.' } },
-            { term: 'round_tripping', desc: { fr: "Même argent en boucle via des intermédiaires", en: 'Same money looped through intermediaries' } },
-            { term: 'mule_account', desc: { fr: 'Compte tiers utilisé comme relais', en: 'Third-party account used as a relay' } },
+            { term: 'montant_explosif', desc: { fr: 'Un seul virement énorme', en: 'One huge transfer' } },
+            { term: 'fragmentation', desc: { fr: 'Un gros montant découpé en petits paiements', en: 'A large amount split into small payments' } },
+            { term: 'usurpation', desc: { fr: "Copie du profil d'un vrai client", en: "Copies a real client's profile" } },
+            { term: 'rapidite', desc: { fr: 'Rafale de transactions', en: 'Burst of transactions' } },
+            { term: 'localisation', desc: { fr: 'Transaction depuis une ville inhabituelle', en: 'Transaction from an unusual city' } },
+            { term: 'compte_dormant', desc: { fr: 'Compte inactif qui se réveille', en: 'Dormant account waking up' } },
+            { term: 'micro_transactions', desc: { fr: 'Beaucoup de tout petits prélèvements', en: 'Many tiny debits' } },
+            { term: 'horaires_suspects', desc: { fr: 'Transferts entre 0 h et 4 h', en: 'Transfers between midnight and 4 a.m.' } },
+            { term: 'round_tripping', desc: { fr: "Le même argent qui tourne en boucle", en: 'The same money going round in a loop' } },
+            { term: 'mule_account', desc: { fr: 'Compte tiers servant de relais', en: 'Third-party account used as a relay' } },
           ],
         },
         { type: 'code', body: 'Q(s) ← Q(s) + α · (reward − Q(s))     α = 0.1   ε = 0.2' },
         {
           type: 'text',
           body: {
-            fr: "80 % du temps, le fraudeur exploite la meilleure stratégie connue ; 20 % du temps, il en essaie une au hasard. À la fin, tous les scores Q sont négatifs : aucune stratégie ne paie, signe que la détection tient.",
-            en: 'Eighty percent of the time the fraudster exploits its best known strategy; twenty percent of the time it tries a random one. By the end, every Q-score is negative: no strategy pays off, which shows the detection holds.',
+            fr: "80 % du temps, le fraudeur reprend sa meilleure stratégie ; 20 % du temps, il en tente une au hasard. En fin de simulation, presque tous les scores Q sont négatifs. Les rares positifs portent sur la ville inhabituelle et les comptes mules, justement les deux règles les plus faibles : les fraudeurs les ont trouvées seuls.",
+            en: 'Eighty percent of the time the fraudster reuses its best strategy; the rest of the time it tries one at random. By the end, almost every Q-score is negative. The few positive ones are on the unusual city and mule accounts, precisely the two weakest rules: the fraudsters found them on their own.',
           },
         },
       ],
@@ -382,76 +357,47 @@ const fraud: Project = {
             [{ fr: 'signal faible', en: 'weak signal' }, { fr: 'heure ≥ 22 h', en: 'hour ≥ 10 p.m.' }, '+15'],
           ],
           note: {
-            fr: 'Seuil de décision : score ≥ 30 points, calibré pour éliminer les faux positifs.',
-            en: 'Decision threshold: score ≥ 30 points, calibrated to eliminate false positives.',
+            fr: 'Une transaction est bloquée à partir de 30 points.',
+            en: 'A transaction is blocked from 30 points.',
+          },
+        },
+        {
+          type: 'text',
+          body: {
+            fr: "J'ai d'abord essayé de remplacer les règles par du machine learning, dont un XGBoost entraîné sur 50 000 transactions simulées. Hors simulation il semblait excellent ; face à des fraudeurs qui s'adaptent, il laissait passer bien plus de fraudes que les règles. J'ai gardé les règles.",
+            en: 'I first tried replacing the rules with machine learning, including an XGBoost model trained on 50,000 simulated transactions. Offline it looked excellent; against fraudsters that adapt, it let far more fraud through than the rules. I kept the rules.',
           },
         },
       ],
     },
     {
-      title: { fr: 'Performances', en: 'Performance' },
-      blocks: [
-        {
-          type: 'lists',
-          columns: [
-            {
-              title: { fr: "Speedup (loi d'Amdahl)", en: "Speedup (Amdahl's law)" },
-              items: [
-                { fr: 'Partie séquentielle : 15 %', en: 'Sequential part: 15%' },
-                { fr: 'Speedup maximal théorique : ×4,5', en: 'Theoretical max speedup: 4.5×' },
-                { fr: 'Speedup obtenu : ×3,5 (6 cœurs)', en: 'Measured speedup: 3.5× (6 cores)' },
-                { fr: 'Efficacité parallèle : 77,8 %', en: 'Parallel efficiency: 77.8%' },
-              ],
-            },
-            {
-              title: { fr: 'Détection', en: 'Detection' },
-              items: [
-                { fr: 'Fraudes détectées : 1 478 / 1 500', en: 'Frauds caught: 1,478 / 1,500' },
-                { fr: 'Fraudes manquées : 22 (1,5 %)', en: 'Frauds missed: 22 (1.5%)' },
-                { fr: 'Faux positifs : 0', en: 'False positives: 0' },
-              ],
-            },
-          ],
-        },
-        {
-          type: 'table',
-          head: [{ fr: 'Environnement', en: 'Environment' }, { fr: 'Détail', en: 'Detail' }, 'Speedup'],
-          rows: [
-            [{ fr: 'Windows natif', en: 'Native Windows' }, { fr: '6 cœurs physiques', en: '6 physical cores' }, '×3,50'],
-            ['Docker / WSL2', { fr: '6 cœurs virtuels', en: '6 virtual cores' }, '×3,02'],
-            [{ fr: 'Linux natif', en: 'Native Linux' }, { fr: 'fork() au lieu de spawn()', en: 'fork() instead of spawn()' }, '×5–6*'],
-          ],
-          note: { fr: '* Estimation théorique.', en: '* Theoretical estimate.' },
-        },
-      ],
-    },
-    {
-      title: { fr: 'Difficultés rencontrées', en: 'Problems solved' },
+      title: { fr: 'Résultats', en: 'Results' },
       blocks: [
         {
           type: 'table',
-          head: [{ fr: 'Difficulté', en: 'Issue' }, { fr: 'Problème', en: 'Problem' }, { fr: 'Solution', en: 'Solution' }],
+          head: [{ fr: 'Stratégie', en: 'Strategy' }, { fr: 'Détectée', en: 'Caught' }],
           rows: [
-            [{ fr: 'GIL Python', en: 'Python GIL' }, { fr: 'threading inutile pour le calcul', en: 'threading useless for CPU work' }, { fr: 'multiprocessing contourne le GIL', en: 'multiprocessing bypasses the GIL' }],
-            [{ fr: 'Coût de spawn', en: 'Spawn overhead' }, { fr: 'Relance à chaque tour', en: 'Respawn on every round' }, { fr: 'Pool persistant', en: 'Persistent pool' }],
-            [{ fr: 'Mémoire séparée', en: 'Separate memory' }, { fr: 'Un espace mémoire par processus', en: 'One memory space per process' }, { fr: 'SQLite partagée + retour des données', en: 'Shared SQLite + returned data' }],
-            [{ fr: 'Usurpation', en: 'Identity theft' }, { fr: 'Le fraudeur copie un profil exact', en: 'Fraudster copies an exact profile' }, { fr: 'Contrôle des doublons avant distribution', en: 'Duplicate check before dispatch' }],
-            [{ fr: 'Faux positifs', en: 'False positives' }, { fr: 'Règles trop larges', en: 'Rules too broad' }, { fr: 'Calibration des zones client / fraudeur', en: 'Calibrated client vs fraudster ranges' }],
+            [{ fr: 'Fragmentation, rafales, micro-transactions, horaires, montant explosif, round tripping, usurpation', en: 'Splitting, bursts, micro-transactions, night transfers, huge transfer, round tripping, identity theft' }, '100 %'],
+            [{ fr: 'Compte dormant', en: 'Dormant account' }, '98,3 %'],
+            [{ fr: 'Compte mule', en: 'Mule account' }, '95,6 %'],
+            [{ fr: 'Ville inhabituelle', en: 'Unusual city' }, '90,2 %'],
           ],
+          note: {
+            fr: '25 simulations, 166 226 transactions. Les règles sont calibrées sur ce simulateur : ces chiffres ne valent pas pour de vraies données bancaires.',
+            en: '25 simulations, 166,226 transactions. The rules are calibrated on this simulator, so these numbers do not carry over to real banking data.',
+          },
         },
         {
-          type: 'lists',
-          columns: [
-            {
-              title: { fr: 'Pistes', en: 'Next steps' },
-              items: [
-                { fr: 'Linux natif (fork) pour viser ×5–6', en: 'Native Linux (fork) to reach 5–6×' },
-                { fr: 'Cluster Docker multi-nœuds', en: 'Multi-node Docker cluster' },
-                { fr: 'XGBoost / ML à la place des règles', en: 'XGBoost / ML instead of rules' },
-                { fr: 'Spark ou Dask pour passer à l’échelle', en: 'Spark or Dask to scale out' },
-              ],
-            },
+          type: 'table',
+          head: [{ fr: 'Processus', en: 'Processes' }, { fr: 'Séquentiel', en: 'Sequential' }, { fr: 'Parallèle', en: 'Parallel' }, 'Speedup', { fr: 'Efficacité', en: 'Efficiency' }],
+          rows: [
+            ['4', '375 s', '121 s', '×3,1', '77 %'],
+            ['6', '374 s', '86 s', '×4,3', '72 %'],
           ],
+          note: {
+            fr: "Mesuré sous Windows, 6 cœurs physiques. D'après la loi d'Amdahl, 8 à 10 % du travail reste séquentiel (découpage, envoi, collecte), ce qui plafonne le speedup vers ×10 à ×13.",
+            en: "Measured on Windows, 6 physical cores. By Amdahl's law, 8 to 10% of the work stays sequential (splitting, sending, collecting), which caps the speedup around 10–13×.",
+          },
         },
       ],
     },
@@ -466,18 +412,18 @@ const sentiment: Project = {
     en: 'Sentiment analysis: KFC, McDonald’s, Burger King',
   },
   short: {
-    fr: '145 550 tweets classés en positif/négatif, gestion du déséquilibre (SMOTE, RUS) et lecture métier des erreurs pour chaque marque.',
-    en: '145,550 tweets classified as positive or negative, class imbalance handled with SMOTE and RUS, and a business reading of errors for each brand.',
+    fr: '137 000 tweets classés en positifs ou négatifs, avec rééquilibrage des classes et comparaison de quatre modèles. 91,5 % sur le test, servi par une API Flask.',
+    en: '137,000 tweets classified as positive or negative, with class rebalancing and four models compared. 91.5% on the test set, served through a Flask API.',
   },
   summary: {
-    fr: 'Classification automatique des sentiments clients sur Twitter pour KFC, McDonald’s et Burger King, puis recommandations concrètes par marque.',
-    en: 'Automatic classification of customer sentiment on Twitter for KFC, McDonald’s and Burger King, followed by concrete recommendations for each brand.',
+    fr: 'Classer le ton des tweets qui parlent de KFC, McDonald’s et Burger King, puis comparer les trois marques.',
+    en: 'Classifying the tone of tweets about KFC, McDonald’s and Burger King, then comparing the three brands.',
   },
   context: { fr: 'Module NLP', en: 'NLP module' },
   period: { fr: 'Master 2 · novembre 2025', en: "Master's year 2 · November 2025" },
   meta: [{ fr: 'Encadré par Dr. Soma', en: 'Supervised by Dr. Soma' }],
   domains: ['nlp', 'ml'],
-  tech: ['Python', 'spaCy', 'scikit-learn', 'imbalanced-learn', 'LightGBM', 'Pandas', 'Plotly', 'WordCloud'],
+  tech: ['Python', 'spaCy', 'scikit-learn', 'imbalanced-learn', 'LightGBM', 'Flask', 'Gradio'],
   sections: [
     {
       title: { fr: 'Contexte', en: 'Context' },
@@ -485,17 +431,24 @@ const sentiment: Project = {
         {
           type: 'text',
           body: {
-            fr: "Les réseaux sociaux donnent un retour immédiat des consommateurs sur les marques de restauration rapide. L'objectif : classer automatiquement la polarité des tweets pour mesurer la satisfaction, comparer l'image des marques et en tirer des axes d'amélioration concrets.",
-            en: 'Social media gives instant consumer feedback on fast-food brands. The goal: automatically classify tweet polarity to measure satisfaction, compare brand perception and derive concrete improvements.',
+            fr: "Les clients des fast-foods disent sur Twitter ce qu'ils pensent, en temps réel et en grand nombre. Le but : classer automatiquement ces tweets en positifs ou négatifs, puis comparer les trois marques.",
+            en: 'Fast-food customers say what they think on Twitter, in real time and in large numbers. The goal: automatically classify these tweets as positive or negative, then compare the three brands.',
           },
         },
         {
           type: 'stats',
           items: [
-            { value: '145 550', label: { fr: 'tweets analysés', en: 'tweets analysed' } },
-            { value: '3', label: { fr: 'marques comparées', en: 'brands compared' }, note: { fr: "McDonald's 60 %, KFC 23 %, BK 12 %", en: "McDonald's 60%, KFC 23%, BK 12%" } },
-            { value: '91,6 %', label: { fr: 'accuracy du modèle retenu', en: 'accuracy of the final model' } },
+            { value: '137 469', label: { fr: 'tweets (hors neutres)', en: 'tweets (neutral removed)' } },
+            { value: '3', label: { fr: 'marques', en: 'brands' }, note: { fr: "McDonald's 65 %, KFC 23 %, BK 12 %", en: "McDonald's 65%, KFC 23%, BK 12%" } },
+            { value: '91,5 %', label: { fr: 'accuracy sur le test', en: 'test accuracy' } },
           ],
+        },
+        {
+          type: 'text',
+          body: {
+            fr: "Les étiquettes du jeu de données viennent d'un score automatique de polarité, proche de TextBlob, et non d'une annotation humaine. Le modèle apprend donc à reproduire ce score.",
+            en: 'The dataset labels come from an automatic polarity score close to TextBlob, not from human annotation, so the model learns to reproduce that score.',
+          },
         },
       ],
     },
@@ -506,9 +459,9 @@ const sentiment: Project = {
           type: 'steps',
           items: [
             { title: { fr: 'Nettoyage', en: 'Cleaning' }, body: { fr: 'Minuscules, suppression de la ponctuation, des accents et des caractères spéciaux.', en: 'Lowercasing, removal of punctuation, accents and special characters.' } },
-            { title: { fr: 'Lemmatisation', en: 'Lemmatisation' }, body: { fr: 'spaCy (en_core_web_sm) pour ramener les mots à leur forme canonique.', en: 'spaCy (en_core_web_sm) to reduce words to their base form.' } },
-            { title: { fr: 'Encodage', en: 'Labelling' }, body: { fr: 'Polarité transformée en classes binaires : 0 (négatif) / 1 (positif).', en: 'Polarity mapped to binary classes: 0 (negative) / 1 (positive).' } },
-            { title: 'TF-IDF', body: { fr: 'Unigrammes + bigrammes, max_df = 0.75, vocabulaire de 551 197 features.', en: 'Unigrams + bigrams, max_df = 0.75, vocabulary of 551,197 features.' } },
+            { title: { fr: 'Lemmatisation', en: 'Lemmatisation' }, body: { fr: 'spaCy (en_core_web_sm) pour ramener chaque mot à sa forme de base.', en: 'spaCy (en_core_web_sm) to bring each word back to its base form.' } },
+            { title: { fr: 'Étiquettes', en: 'Labels' }, body: { fr: 'Tweets neutres écartés, puis 0 pour négatif et 1 pour positif.', en: 'Neutral tweets removed, then 0 for negative and 1 for positive.' } },
+            { title: 'TF-IDF', body: { fr: 'Unigrammes et bigrammes, appris sur le train uniquement.', en: 'Unigrams and bigrams, fitted on the training set only.' } },
           ],
         },
       ],
@@ -519,59 +472,49 @@ const sentiment: Project = {
         {
           type: 'text',
           body: {
-            fr: "Le jeu de données compte 64 % de tweets positifs pour 36 % de négatifs. Sans correction, le modèle sur-prédit la classe majoritaire. J'ai comparé le sur-échantillonnage (SMOTE) et le sous-échantillonnage aléatoire (RUS).",
-            en: 'The dataset has 64% positive tweets and 36% negative. Left uncorrected, the model over-predicts the majority class. I compared oversampling (SMOTE) with random undersampling (RUS).',
+            fr: "Il y a 64 % de tweets positifs pour 36 % de négatifs. J'ai comparé deux façons de rééquilibrer le train : le sur-échantillonnage (SMOTE) et le sous-échantillonnage aléatoire (RUS).",
+            en: 'There are 64% positive tweets and 36% negative. I compared two ways of rebalancing the training set: oversampling (SMOTE) and random undersampling (RUS).',
           },
         },
         {
           type: 'table',
-          head: [{ fr: 'Modèle', en: 'Model' }, 'Accuracy', 'F1', { fr: 'Équilibre', en: 'Balance' }],
+          head: [{ fr: 'Modèle', en: 'Model' }, 'Accuracy', 'F1', { fr: 'Rappel négatifs', en: 'Recall on negatives' }],
           rows: [
-            [{ fr: 'Régression logistique (base)', en: 'Logistic regression (baseline)' }, '92,3 %', '0.940', { fr: 'biaisé', en: 'biased' }],
-            [{ fr: 'Régression logistique + SMOTE', en: 'Logistic regression + SMOTE' }, '92,0 %', '0.938', { fr: 'acceptable', en: 'acceptable' }],
-            [{ fr: 'Régression logistique + RUS', en: 'Logistic regression + RUS' }, '91,6 %', '0.933', { fr: 'équilibré', en: 'balanced' }],
-            ['LightGBM + SMOTE', '91,3 %', '0.933', { fr: 'acceptable', en: 'acceptable' }],
-            ['MultinomialNB + SMOTE', '88,0 %', '0.907', { fr: 'faible', en: 'weak' }],
+            [{ fr: 'Régression logistique + SMOTE', en: 'Logistic regression + SMOTE' }, '92,0 %', '0.938', '87,2 %'],
+            [{ fr: 'Régression logistique + RUS', en: 'Logistic regression + RUS' }, '91,5 %', '0.932', '92,0 %'],
+            ['LightGBM + SMOTE', '91,3 %', '0.933', '85,5 %'],
+            ['Naive Bayes + SMOTE', '88,0 %', '0.907', '82,9 %'],
           ],
-          highlight: 2,
+          highlight: 1,
           note: {
-            fr: "Modèle retenu : régression logistique + RUS. Un peu moins d'accuracy que la base, mais 92 % de vrais négatifs détectés contre 87 % avec SMOTE : la performance est homogène sur les deux classes.",
-            en: 'Chosen model: logistic regression + RUS. Slightly lower accuracy than the baseline, but it catches 92% of true negatives versus 87% with SMOTE, so performance is even across both classes.',
+            fr: "Modèle retenu : régression logistique + RUS. Un demi-point d'accuracy en moins qu'avec SMOTE, mais 92 % des tweets négatifs reconnus au lieu de 87 %.",
+            en: 'Chosen model: logistic regression + RUS. Half a point of accuracy less than with SMOTE, but 92% of negative tweets caught instead of 87%.',
           },
         },
       ],
     },
     {
-      title: { fr: 'Lecture par marque', en: 'Brand by brand' },
+      title: { fr: 'Par marque', en: 'Brand by brand' },
       blocks: [
         {
-          type: 'defs',
-          items: [
-            {
-              term: "McDonald's",
-              aside: { fr: 'accuracy 94,5 %', en: '94.5% accuracy' },
-              desc: {
-                fr: 'Problème récurrent des machines à glace et milkshake en panne (devenu un mème). Priorité : la rapidité du service. N-grammes fréquents : « happy meal », « adult happy meal ».',
-                en: 'A recurring complaint about broken ice cream and milkshake machines (now a meme). Priority: speed of service. Frequent n-grams: "happy meal", "adult happy meal".',
-              },
-            },
-            {
-              term: 'KFC',
-              aside: { fr: 'accuracy 93,4 %', en: '93.4% accuracy' },
-              desc: {
-                fr: 'Contrôle qualité jugé irrégulier, portions trouvées petites, erreurs dans les commandes. Priorité : standardiser les produits et l’exactitude des commandes.',
-                en: 'Quality control seen as inconsistent, portions seen as small, order mistakes. Priority: standardise products and order accuracy.',
-              },
-            },
-            {
-              term: 'Burger King',
-              aside: { fr: 'accuracy 93,9 %', en: '93.9% accuracy' },
-              desc: {
-                fr: 'Perception positive sur le rapport qualité-prix et les promotions. Opportunité : s’en servir pour se différencier.',
-                en: 'Positive perception of value for money and promotions. Opportunity: lean on it to stand out.',
-              },
-            },
+          type: 'table',
+          head: [{ fr: 'Marque', en: 'Brand' }, { fr: 'Tweets négatifs', en: 'Negative tweets' }, { fr: 'Accuracy du modèle (test)', en: 'Model accuracy (test)' }],
+          rows: [
+            ["McDonald's", '32,5 %', '92,1 %'],
+            ['KFC', '42,4 %', '90,5 %'],
+            ['Burger King', '42,0 %', '89,9 %'],
           ],
+          note: {
+            fr: "McDonald's a nettement moins de tweets négatifs en proportion que KFC et Burger King. Une partie de l'écart vient sans doute du « Happy Meal pour adultes », qui revient des milliers de fois dans les tweets enthousiastes.",
+            en: "McDonald's has clearly fewer negative tweets in proportion than KFC and Burger King. Part of the gap probably comes from the adult Happy Meal, which shows up thousands of times in enthusiastic tweets.",
+          },
+        },
+        {
+          type: 'text',
+          body: {
+            fr: 'Le modèle est servi par une API Flask et une petite interface Gradio : on colle des tweets ou on envoie un CSV, il renvoie le sentiment de chacun.',
+            en: 'The model is served through a Flask API and a small Gradio interface: paste tweets or upload a CSV, and it returns the sentiment of each one.',
+          },
         },
       ],
     },
@@ -580,7 +523,7 @@ const sentiment: Project = {
 
 const ariel: Project = {
   slug: 'defi-ia-ariel-2025',
-  sort: 202501,
+  sort: 202601,
   featured: true,
   award: { fr: '3e national · 12e international', en: '3rd nationally · 12th internationally' },
   title: {
@@ -588,17 +531,18 @@ const ariel: Project = {
     en: 'ESA-Ariel 2025 AI Challenge: water and clouds in exoplanet atmospheres',
   },
   short: {
-    fr: 'Classification de spectres atmosphériques simulés pour la mission ARIEL de l’ESA. Score de 0,974 : 3e place nationale, 12e internationale.',
-    en: 'Classifying simulated atmospheric spectra for ESA’s ARIEL mission. Score of 0.974: 3rd nationally, 12th internationally.',
+    fr: 'Dire si l’atmosphère d’une exoplanète contient de l’eau et des nuages à partir de son spectre simulé. Score de 0,974 : 3e place nationale, 12e internationale.',
+    en: 'Telling whether an exoplanet’s atmosphere contains water and clouds from its simulated spectrum. Score of 0.974: 3rd nationally, 12th internationally.',
   },
   summary: {
-    fr: 'Détecter la présence d’eau et de nuages dans des spectres d’exoplanètes simulés pour la mission spatiale ARIEL de l’Agence spatiale européenne.',
+    fr: 'Détecter l’eau et les nuages dans des spectres d’exoplanètes simulés pour la mission ARIEL de l’Agence spatiale européenne.',
     en: 'Detecting water and clouds in simulated exoplanet spectra for the European Space Agency’s ARIEL mission.',
   },
   context: { fr: 'Compétition IA · mission ARIEL (ESA)', en: 'AI competition · ARIEL mission (ESA)' },
-  period: { fr: 'Janvier 2025', en: 'January 2025' },
+  period: { fr: 'Octobre 2025 – janvier 2026', en: 'October 2025 – January 2026' },
+  meta: [{ fr: 'En équipe (UFHB LightWaves)', en: 'Team entry (UFHB LightWaves)' }],
   domains: ['ml'],
-  tech: ['Python', 'LightGBM', 'scikit-learn', 'Feature engineering', 'Ensembling'],
+  tech: ['Python', 'NumPy', 'SciPy', 'scikit-learn', 'LightGBM', 'Feature engineering'],
   sections: [
     {
       title: { fr: 'Contexte scientifique', en: 'Scientific context' },
@@ -606,8 +550,8 @@ const ariel: Project = {
         {
           type: 'text',
           body: {
-            fr: "ARIEL (Atmospheric Remote-sensing Infrared Exoplanet Laboratory) est une mission de l'ESA prévue pour 2029. Elle doit révéler la composition chimique, les propriétés physiques et la structure des atmosphères d'exoplanètes en orbite autour d'étoiles différentes du Soleil, pour mieux comprendre la diversité des planètes et les conditions qui rendent un monde habitable.",
-            en: 'ARIEL (Atmospheric Remote-sensing Infrared Exoplanet Laboratory) is an ESA mission planned for 2029. It aims to reveal the chemical composition, physical properties and structure of the atmospheres of exoplanets orbiting stars unlike the Sun, to better understand planetary diversity and what makes a world habitable.',
+            fr: "ARIEL est une mission de l'ESA prévue pour 2029, qui observera l'atmosphère d'environ 1 000 exoplanètes. Quand une planète passe devant son étoile, une partie de la lumière traverse son atmosphère ; la part de lumière bloquée à chaque longueur d'onde dépend de ce que contient cette atmosphère.",
+            en: 'ARIEL is an ESA mission planned for 2029 that will observe the atmospheres of about 1,000 exoplanets. When a planet passes in front of its star, part of the light goes through its atmosphere; how much is blocked at each wavelength depends on what that atmosphere contains.',
           },
         },
       ],
@@ -618,14 +562,15 @@ const ariel: Project = {
         {
           type: 'text',
           body: {
-            fr: "Les données sont des spectres simulés d'ARIEL, c'est-à-dire le produit final des observations de transits planétaires, et elles sont bruitées. Il s'agit de deux classifications binaires : présence ou absence d'eau (H₂O), présence ou absence de nuages.",
-            en: 'The data are simulated ARIEL spectra, the end product of planetary transit observations, and they are noisy. The task is two binary classifications: water (H₂O) present or not, clouds present or not.',
+            fr: "Pour chaque planète, on dispose d'un spectre simulé et bruité de 52 points (0,5 à 7,8 µm) et de quelques paramètres du système (masse et température de l'étoile, masse de la planète, taille de l'orbite). Il faut répondre à deux questions : y a-t-il de l'eau, y a-t-il des nuages ? 3 000 planètes pour apprendre, 1 032 à prédire.",
+            en: 'For each planet there is a simulated, noisy 52-point spectrum (0.5 to 7.8 µm) and a few system parameters (star mass and temperature, planet mass, orbit size). Two questions to answer: is there water, are there clouds? 3,000 planets to learn from, 1,032 to predict.',
           },
         },
         {
           type: 'stats',
           items: [
-            { value: '0,974', label: { fr: 'score de prédiction', en: 'prediction score' } },
+            { value: '0,974', label: { fr: 'score au classement', en: 'leaderboard score' } },
+            { value: '97,8 %', label: { fr: 'accuracy en validation croisée', en: 'cross-validation accuracy' } },
             { value: '3e', label: { fr: 'place nationale', en: 'place nationally' } },
             { value: '12e', label: { fr: 'place internationale', en: 'place internationally' } },
           ],
@@ -633,166 +578,27 @@ const ariel: Project = {
       ],
     },
     {
-      title: { fr: 'Ce que le défi m’a appris', en: 'What I learned' },
+      title: { fr: 'Notre approche', en: 'Our approach' },
       blocks: [
         {
           type: 'defs',
           items: [
-            { term: { fr: 'Traitement du signal', en: 'Signal processing' }, desc: { fr: 'Lire et nettoyer des spectres atmosphériques bruités.', en: 'Reading and cleaning noisy atmospheric spectra.' } },
-            { term: 'Feature engineering', desc: { fr: 'Construire des variables pertinentes à partir du spectre.', en: 'Building meaningful features from the spectrum.' } },
-            { term: { fr: 'Ensembling et validation', en: 'Ensembling and validation' }, desc: { fr: 'Tuning, validation croisée, combinaison de modèles sous contrainte de temps.', en: 'Tuning, cross-validation and model blending under time pressure.' } },
-            { term: { fr: 'Travail en équipe', en: 'Teamwork' }, desc: { fr: 'Répartir les pistes, partager les résultats, décider vite.', en: 'Splitting leads, sharing results, deciding fast.' } },
+            { term: { fr: 'Variables', en: 'Features' }, desc: { fr: "80 par planète : le spectre normalisé planète par planète, 17 statistiques sur le spectre (pente, courbure, écart entre les instruments FGS et AIRS, profondeur dans la bande de l'eau…) et 11 grandeurs physiques (température d'équilibre, gravité, hauteur d'échelle…).", en: '80 per planet: the spectrum normalised planet by planet, 17 statistics on the spectrum (slope, curvature, gap between the FGS and AIRS instruments, depth in the water band…) and 11 physical quantities (equilibrium temperature, gravity, scale height…).' } },
+            { term: { fr: 'Modèles', en: 'Models' }, desc: { fr: 'Un GradientBoosting et un LightGBM pour chaque question, dont on moyenne les probabilités.', en: 'A GradientBoosting and a LightGBM model for each question, with their probabilities averaged.' } },
+            { term: 'Validation', desc: { fr: 'Validation croisée en 5 plis, stratifiée sur la combinaison eau/nuages. Le seuil de décision de chaque question est choisi sur les prédictions hors pli.', en: '5-fold cross-validation stratified on the water/clouds combination. The decision threshold for each question is chosen on the out-of-fold predictions.' } },
           ],
-        },
-      ],
-    },
-  ],
-}
-
-const fintech: Project = {
-  slug: 'services-financiers',
-  sort: 202505,
-  title: {
-    fr: 'Adoption des FinTechs en Côte d’Ivoire : analyse temporelle',
-    en: 'FinTech adoption in Côte d’Ivoire: a time series study',
-  },
-  short: {
-    fr: 'Taux de pénétration des services financiers numériques de 2000 à 2024 : tests de stationnarité, modèles ARIMA et prévisions jusqu’en 2028.',
-    en: 'Digital financial services penetration from 2000 to 2024: stationarity tests, ARIMA models and forecasts to 2028.',
-  },
-  summary: {
-    fr: 'Analyse du taux de pénétration des services financiers numériques sur 2000–2024, avec modélisation ARIMA et prévisions à court terme.',
-    en: 'An analysis of digital financial services penetration over 2000–2024, with ARIMA modelling and short-term forecasts.',
-  },
-  context: { fr: 'Module Séries temporelles', en: 'Time series module' },
-  period: { fr: 'Master 1 · 2024–2025', en: "Master's year 1 · 2024–2025" },
-  domains: ['ts'],
-  tech: ['Python', 'Pandas', 'statsmodels', 'ARIMA', 'Matplotlib', 'Seaborn', 'Quarto'],
-  sections: [
-    {
-      title: { fr: 'Contexte', en: 'Context' },
-      blocks: [
-        {
-          type: 'text',
-          body: {
-            fr: "Le paysage financier ivoirien a beaucoup changé avec l'essor des services numériques. Là où les banques traditionnelles peinent à toucher une large part de la population, le Mobile Money, les FinTechs et les paiements mobiles se sont imposés, surtout chez les jeunes et les personnes non bancarisées.",
-            en: 'The Ivorian financial landscape has changed deeply with the rise of digital services. Where traditional banks struggle to reach much of the population, Mobile Money, FinTechs and mobile payments have taken hold, especially among young and unbanked people.',
-          },
-        },
-        {
-          type: 'question',
-          body: {
-            fr: "Comment modéliser l'évolution du taux de pénétration des FinTechs en Côte d'Ivoire et projeter son évolution dans un contexte régional de plus en plus concurrentiel ?",
-            en: 'How can we model FinTech penetration in Côte d’Ivoire and project its evolution in an increasingly competitive regional market?',
-          },
-        },
-        {
-          type: 'stats',
-          items: [
-            { value: { fr: '25 ans', en: '25 years' }, label: { fr: 'de données', en: 'of data' }, note: '2000–2024' },
-            { value: '55 %', label: { fr: 'pic historique', en: 'historical peak' }, note: { fr: 'en 2019', en: 'in 2019' } },
-            { value: '41,4 %', label: { fr: 'moyenne depuis 2020', en: 'average since 2020' } },
-          ],
-        },
-      ],
-    },
-    {
-      title: { fr: 'Exploration', en: 'Exploration' },
-      blocks: [
-        {
-          type: 'text',
-          body: {
-            fr: "L'adoption évolue en dents de scie, entre 35 % et 55 %, signe d'une forte sensibilité aux chocs externes : crises économiques, réglementation, habitudes de consommation. Depuis 2020, le marché semble se stabiliser autour de 40–45 %, ce qui suggère une phase de maturité. Aucun service ne domine durablement : les utilisateurs passent de l'un à l'autre selon les opportunités.",
-            en: 'Adoption moves in a sawtooth pattern between 35% and 55%, a sign of strong sensitivity to external shocks: economic crises, regulation, consumer habits. Since 2020 the market seems to have settled around 40–45%, suggesting a maturity phase. No single service dominates for long: users move from one to another as opportunities arise.',
-          },
         },
         {
           type: 'table',
-          head: ['Service', '2000', '2024', { fr: 'Pic', en: 'Peak' }, { fr: 'Évolution', en: 'Change' }],
+          head: [{ fr: 'Question', en: 'Question' }, { fr: 'Seuil', en: 'Threshold' }, { fr: 'Accuracy (validation croisée)', en: 'Accuracy (cross-validation)' }],
           rows: [
-            ['Crypto', '45,9 %', '35,8 %', '71,8 % (2018)', '−10,1 pts'],
-            [{ fr: 'Paiements', en: 'Payments' }, '43,6 %', '42,2 %', '76,4 % (2001)', '−1,4 pt'],
-            [{ fr: 'Épargne', en: 'Savings' }, '29,8 %', '39,8 %', '69,1 % (2010)', '+10,0 pts'],
-            [{ fr: 'Prêts', en: 'Loans' }, '27,0 %', '31,4 %', '65,3 % (2019)', '+4,5 pts'],
-          ],
-        },
-      ],
-    },
-    {
-      title: { fr: 'Analyse économétrique', en: 'Econometric analysis' },
-      blocks: [
-        {
-          type: 'table',
-          head: ['Test', { fr: 'Statistique', en: 'Statistic' }, 'p-value'],
-          rows: [
-            [{ fr: 'ADF (Dickey-Fuller augmenté)', en: 'ADF (augmented Dickey-Fuller)' }, '−26.2862', '0.0000'],
-            ['KPSS', '0.1627', '0.1000'],
+            [{ fr: 'Eau', en: 'Water' }, '0.37', '98,1 %'],
+            [{ fr: 'Nuages', en: 'Clouds' }, '0.47', '97,5 %'],
           ],
           note: {
-            fr: 'Les deux tests confirment la stationnarité : aucune transformation nécessaire avant la modélisation. Les ACF/PACF montrent un bruit blanc, sans autocorrélation significative, ce qui oriente vers un ARIMA simple sans saisonnalité.',
-            en: 'Both tests confirm stationarity, so no transformation is needed before modelling. ACF/PACF show white noise with no significant autocorrelation, pointing to a simple non-seasonal ARIMA.',
+            fr: "Les nuages sont un peu plus durs à détecter : une couche épaisse aplatit le spectre et peut masquer aussi la signature de l'eau.",
+            en: 'Clouds are a little harder: a thick layer flattens the spectrum and can hide the water signature too.',
           },
-        },
-      ],
-    },
-    {
-      title: { fr: 'Modèles ARIMA', en: 'ARIMA models' },
-      blocks: [
-        {
-          type: 'defs',
-          items: [
-            {
-              term: 'ARIMA(0,0,0)',
-              desc: {
-                fr: 'Modèle de référence avec constante (41,37 %) : le taux évolue comme un phénomène aléatoire stable autour d’une moyenne. AIC 5 551,96 · BIC 5 560,82.',
-                en: 'Baseline with a constant (41.37%): the rate behaves like a stable random process around a mean. AIC 5,551.96 · BIC 5,560.82.',
-              },
-            },
-            {
-              term: { fr: 'ARIMA avec mémoire (retenu)', en: 'ARIMA with memory (chosen)' },
-              desc: {
-                fr: 'Intègre l’influence des valeurs passées pour capter d’éventuelles régularités. Prévisions : 41,06 % (2025), 41,48 % (2026), 41,54 % (2027), 41,55 % (2028).',
-                en: 'Adds the influence of past values to capture possible regularities. Forecasts: 41.06% (2025), 41.48% (2026), 41.54% (2027), 41.55% (2028).',
-              },
-            },
-          ],
-        },
-        {
-          type: 'table',
-          head: [{ fr: 'Métrique', en: 'Metric' }, 'ARIMA(0,0,0)', { fr: 'ARIMA avec mémoire', en: 'ARIMA with memory' }],
-          rows: [
-            ['RMSE', '3.796', '3.768'],
-            ['MAE', '2.699', '2.691'],
-            [{ fr: 'Prévision 2025', en: '2025 forecast' }, '41,61 %', '41,06 %'],
-            [{ fr: 'Prévision 2028', en: '2028 forecast' }, '41,61 %', '41,55 %'],
-            [{ fr: 'Intervalle de confiance', en: 'Confidence interval' }, '32,74 – 50,47 %', '32,32 – 50,39 %'],
-          ],
-        },
-      ],
-    },
-    {
-      title: { fr: 'Conclusion', en: 'Conclusion' },
-      blocks: [
-        {
-          type: 'text',
-          body: {
-            fr: "Le taux de pénétration se comporte comme un bruit blanc stationnaire, sans tendance ni saisonnalité marquée. Les deux modèles projettent une stabilisation autour de 41–42 % d'ici 2028, avec une incertitude notable. L'évolution future dépendra surtout de facteurs externes à l'historique.",
-            en: 'The penetration rate behaves like stationary white noise, with no clear trend or seasonality. Both models project stabilisation around 41–42% by 2028, with substantial uncertainty. Future change will depend mostly on factors outside the series itself.',
-          },
-        },
-        {
-          type: 'lists',
-          columns: [
-            {
-              title: { fr: 'Pistes', en: 'Next steps' },
-              items: [
-                { fr: 'Variables exogènes (réglementation, PIB, accès internet)', en: 'Exogenous variables (regulation, GDP, internet access)' },
-                { fr: 'Modèle VAR pour les interactions entre services', en: 'VAR model for interactions between services' },
-                { fr: "Comparaison avec d'autres pays d'Afrique de l'Ouest", en: 'Comparison with other West African countries' },
-                { fr: 'Ruptures structurelles (COVID-19, crises politiques)', en: 'Structural breaks (COVID-19, political crises)' },
-              ],
-            },
-          ],
         },
       ],
     },
@@ -811,8 +617,8 @@ const scoring: Project = {
     en: 'Logistic regression to select variables, Random Forest to predict: 96% accuracy, AUC 0.99, decision threshold tuned to the business use.',
   },
   summary: {
-    fr: 'Modèle prédictif de satisfaction passager à partir de données réelles d’expérience client, comparant régression logistique et Random Forest, avec optimisation du seuil de décision.',
-    en: 'A passenger satisfaction model built on real customer experience data, comparing logistic regression and Random Forest, with an optimised decision threshold.',
+    fr: 'Prédire si un passager est satisfait à partir de ses notes sur les services, et choisir le seuil de décision selon l’usage.',
+    en: 'Predicting whether a passenger is satisfied from their ratings of the services, and choosing the decision threshold for the intended use.',
   },
   context: { fr: 'Module Projet Scoring', en: 'Scoring project module' },
   period: { fr: 'Master 1 · 2024–2025', en: "Master's year 1 · 2024–2025" },
@@ -825,8 +631,8 @@ const scoring: Project = {
         {
           type: 'text',
           body: {
-            fr: "À partir de données réelles sur l'expérience client (services à bord, ponctualité, confort…), l'objectif est d'identifier en amont les passagers à risque d'insatisfaction pour adapter les services.",
-            en: 'Using real customer experience data (in-flight services, punctuality, comfort…), the goal is to spot passengers at risk of dissatisfaction early so services can be adapted.',
+            fr: "Un questionnaire de satisfaction rempli par plus de 100 000 passagers : profil, notes de 0 à 5 sur 14 services (wifi, confort du siège, embarquement…) et retards. Le but : repérer à l'avance les passagers susceptibles d'être mécontents.",
+            en: 'A satisfaction survey filled in by over 100,000 passengers: profile, 0–5 ratings of 14 services (wifi, seat comfort, boarding…) and delays. The goal: spot ahead of time the passengers likely to be unhappy.',
           },
         },
         {
@@ -896,8 +702,8 @@ const scoring: Project = {
             {
               term: { fr: 'Random Forest (retenu)', en: 'Random Forest (chosen)' },
               desc: {
-                fr: '100 arbres, critère entropie, profondeur 20. Capture les interactions non linéaires ; les scores se répartissent presque en deux groupes nets, insatisfaits près de 0 et satisfaits près de 1.',
-                en: '100 trees, entropy criterion, depth 20. Captures non-linear interactions; scores split into two almost clean groups, dissatisfied near 0 and satisfied near 1.',
+                fr: "100 arbres, critère entropie, profondeur 20. Il saisit les interactions entre services qu'un modèle linéaire ne voit pas : ses scores se séparent presque en deux groupes, mécontents près de 0, satisfaits près de 1.",
+                en: '100 trees, entropy criterion, depth 20. It picks up interactions between services that a linear model misses: its scores split almost into two groups, unhappy near 0, satisfied near 1.',
               },
             },
           ],
@@ -1057,7 +863,7 @@ const returns: Project = {
   ],
 }
 
-export const projects: Project[] = [eye, fraud, sentiment, fintech, scoring, academic, returns, ariel].sort(
+export const projects: Project[] = [eye, fraud, sentiment, scoring, academic, returns, ariel].sort(
   (a, b) => b.sort - a.sort,
 )
 

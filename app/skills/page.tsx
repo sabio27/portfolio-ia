@@ -77,7 +77,8 @@ const methods: T[] = [
   { fr: 'Analyse de sentiments', en: 'Sentiment analysis' },
   { fr: 'Évaluation & intervalles de confiance', en: 'Evaluation & confidence intervals' },
   { fr: 'Clustering spatial', en: 'Spatial clustering' },
-  { fr: 'Calcul parallèle (HPC)', en: 'Parallel computing (HPC)' },
+  { fr: 'Calcul parallèle et HPC', en: 'Parallel computing and HPC' },
+  { fr: 'Architectures parallèles', en: 'Parallel architectures' },
   'IoT',
 ]
 

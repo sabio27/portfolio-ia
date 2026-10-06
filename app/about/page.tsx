@@ -11,32 +11,32 @@ const strengths = [
     icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
     title: { fr: 'Vision par ordinateur', en: 'Computer vision' },
     body: {
-      fr: "Détection d'objets (YOLOv8, YOLOv11), classification d'images, auto-encodeurs et cartes de saillance, sur des jeux de données réels et déséquilibrés.",
-      en: 'Object detection (YOLOv8, YOLOv11), image classification, autoencoders and saliency maps, on real-world, imbalanced datasets.',
+      fr: "Détection d'objets et classification d'images avec YOLO, auto-encodeurs, cartes de saillance. Des jeux de données où certaines classes n'ont que quelques images.",
+      en: 'Object detection and image classification with YOLO, autoencoders, saliency maps. Datasets where some classes have only a handful of images.',
     },
   },
   {
     icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
     title: { fr: 'Machine learning & statistiques', en: 'Machine learning & statistics' },
     body: {
-      fr: "Modélisation prédictive, scoring, NLP et séries temporelles, avec une évaluation rigoureuse : métriques adaptées au métier et intervalles de confiance.",
-      en: 'Predictive modelling, scoring, NLP and time series, with rigorous evaluation: business-relevant metrics and confidence intervals.',
+      fr: "Scoring, classification de textes, boosting. Je fais attention à la façon d'évaluer : jeux train, validation et test bien séparés, métriques adaptées aux classes déséquilibrées.",
+      en: 'Scoring, text classification, boosting. I pay attention to how things are evaluated: properly separated train, validation and test sets, metrics suited to imbalanced classes.',
     },
   },
   {
     icon: 'M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01',
     title: { fr: 'Mise en production', en: 'Production deployment' },
     body: {
-      fr: "Services REST avec FastAPI, conteneurisation Docker, versionnage des modèles avec MLflow et intégration continue avec GitHub Actions.",
-      en: 'REST services with FastAPI, Docker containers, model versioning with MLflow and continuous integration with GitHub Actions.',
+      fr: "Chez LYNK : API FastAPI, conteneurs Docker, registre de modèles MLflow, tests automatiques avec GitHub Actions.",
+      en: 'At LYNK: FastAPI services, Docker containers, an MLflow model registry, automated tests with GitHub Actions.',
     },
   },
   {
     icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
-    title: { fr: 'Rigueur et autonomie', en: 'Rigour and autonomy' },
+    title: { fr: 'Autonomie', en: 'Working on my own' },
     body: {
-      fr: "Démarche méthodique, choix techniques argumentés et documentés. Chez LYNK, j'ai porté seul le projet, de la collecte des images à la mise en service des API.",
-      en: 'A methodical approach with well-argued, documented technical choices. At LYNK, I carried the project on my own, from collecting images to running the APIs in production.',
+      fr: "Chez LYNK, j'étais seul sur le projet, de la collecte des images à la mise en service des API. J'ai appris à trancher et à expliquer mes choix par écrit.",
+      en: 'At LYNK I was alone on the project, from collecting images to running the APIs. I learned to make decisions and explain them in writing.',
     },
   },
 ]
@@ -55,20 +55,20 @@ export default function About() {
           <div className="card space-y-4 p-6 text-base leading-relaxed text-gray-300 md:p-8 md:text-lg">
             <p>
               {t({
-                fr: "Ingénieur IA & Data Science, titulaire d'un Master en Intelligence Artificielle de l'Université Félix Houphouët-Boigny, délivré en partenariat avec l'Université Rennes 2. Ce qui m'intéresse, c'est le moment où un modèle cesse d'être une expérience pour devenir un outil : utilisé, suivi et amélioré par ceux qui en ont besoin.",
-                en: "AI & Data Science Engineer holding a Master's degree in Artificial Intelligence from Félix Houphouët-Boigny University, awarded in partnership with Rennes 2 University. What interests me is the moment a model stops being an experiment and becomes a tool: used, monitored and improved by the people who need it.",
+                fr: "Je suis ingénieur IA & Data Science, diplômé d'un Master en Intelligence Artificielle de l'Université Félix Houphouët-Boigny, en partenariat avec l'Université Rennes 2. J'aime surtout la partie où un modèle quitte le notebook pour servir à quelqu'un : une API, une application, un outil qu'on peut tester.",
+                en: "I am an AI & Data Science Engineer with a Master's in Artificial Intelligence from Félix Houphouët-Boigny University, in partnership with Rennes 2 University. The part I enjoy most is when a model leaves the notebook and becomes useful to someone: an API, an app, a tool people can try.",
               })}
             </p>
             <p>
               {t({
-                fr: "Ma formation initiale en mathématiques appliquées m'apporte une base solide en statistiques et en modélisation. Je l'ai mise en pratique sur des projets variés : vision par ordinateur appliquée au diagnostic médical et à l'agriculture, traitement du langage naturel, prévision de séries temporelles et calcul parallèle.",
-                en: 'My background in applied mathematics gives me a strong foundation in statistics and modelling. I have applied it to a range of projects: computer vision for medical diagnosis and agriculture, natural language processing, time series forecasting and parallel computing.',
+                fr: "J'ai commencé par une licence de mathématiques, ce qui m'a laissé de bonnes bases en statistiques. Depuis, j'ai travaillé sur des images de rétine et de cacaoyers, des tweets, des spectres d'exoplanètes et une simulation de fraude en calcul parallèle.",
+                en: 'I started with a degree in mathematics, which left me with solid grounding in statistics. Since then I have worked on retina and cocoa tree images, tweets, exoplanet spectra and a parallel fraud simulation.',
               })}
             </p>
             <p>
               {t({
-                fr: "Lors de mon stage de fin d'études chez LYNK SARL, j'ai conçu un système de surveillance phytosanitaire du cacaoyer, livré sous forme de services REST conteneurisés, versionnés avec MLflow et vérifiés par intégration continue.",
-                en: 'During my final internship at LYNK SARL, I designed a plant-health monitoring system for cocoa, delivered as containerized REST services, versioned with MLflow and checked through continuous integration.',
+                fr: "Pendant mon stage de fin d'études chez LYNK SARL, j'ai construit seul un système qui part d'une photo de cacaoyer pour arriver à une recommandation de traitement. Il tourne sous forme de trois API dans des conteneurs Docker.",
+                en: 'During my final internship at LYNK SARL, I built on my own a system that goes from a photo of a cocoa tree to a treatment recommendation. It runs as three APIs in Docker containers.',
               })}{' '}
               <Link href="/experience" className="font-semibold text-brand-400 hover:text-brand-300">
                 {lang === 'fr' ? 'Voir le détail →' : 'See details →'}

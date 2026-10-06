@@ -8,7 +8,7 @@ import { projectStyle } from '@/lib/projectStyle'
 import PageHeader from '@/components/PageHeader'
 import { ArrowIcon } from '@/components/Icons'
 
-const filters: (Domain | 'all')[] = ['all', 'vision', 'ml', 'nlp', 'ts', 'hpc', 'viz']
+const filters: (Domain | 'all')[] = ['all', 'vision', 'ml', 'nlp', 'hpc', 'viz']
 
 export default function Projects() {
   const { t, lang } = useLang()
@@ -20,8 +20,8 @@ export default function Projects() {
       <PageHeader
         title={{ fr: 'Mes projets', en: 'My projects' }}
         intro={{
-          fr: "Projets de Master et compétitions d'IA : vision par ordinateur, machine learning, NLP, séries temporelles et calcul parallèle. Chaque fiche détaille les données, la méthode et les résultats.",
-          en: "Master's projects and AI competitions in computer vision, machine learning, NLP, time series and parallel computing. Each page covers the data, the method and the results.",
+          fr: "Projets de Master et compétition d'IA : vision par ordinateur, machine learning, NLP et calcul parallèle. Chaque fiche donne les données, la méthode et les résultats.",
+          en: "Master's projects and an AI competition: computer vision, machine learning, NLP and parallel computing. Each page gives the data, the method and the results.",
         }}
       />
 
