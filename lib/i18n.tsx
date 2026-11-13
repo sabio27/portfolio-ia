@@ -68,6 +68,6 @@ export function useLang() {
 
 /** CV à télécharger selon la langue affichée. */
 export const CV = {
-  fr: { href: '/CV_Ambroise_Koffi_l.pdf', filename: 'CV_Koffi_Ambroise_FR.pdf' },
-  en: { href: '/CV_Ambroise_Koffi_l_en.pdf', filename: 'CV_Koffi_Ambroise_EN.pdf' },
+  fr: { href: '/CV_Ambroise_Koffi_fr_last_2.pdf', filename: 'CV_Koffi_Ambroise_FR.pdf' },
+  en: { href: '/CV_Ambroise_Koffi_en_platf.pdf', filename: 'CV_Koffi_Ambroise_EN.pdf' },
 } as const

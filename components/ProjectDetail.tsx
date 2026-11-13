@@ -48,6 +48,11 @@ export default function ProjectDetail({ slug }: { slug: string }) {
               <span className="rounded-lg bg-gold-400 px-3 py-1 font-bold text-dark-950">{t(p.award)}</span>
             )}
             {p.meta?.map((m, i) => <span key={i}>{t(m)}</span>)}
+            {p.links?.map((l) => (
+              <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[40px] items-center gap-1.5 font-semibold text-brand-400 hover:text-brand-300">
+                {l.label} ↗
+              </a>
+            ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {p.tech.map((x) => (

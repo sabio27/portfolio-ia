@@ -4,9 +4,10 @@ import type { T } from './i18n'
 /* Types                                                                */
 /* ------------------------------------------------------------------ */
 
-export type Domain = 'vision' | 'nlp' | 'ml' | 'ts' | 'hpc' | 'viz'
+export type Domain = 'llm' | 'vision' | 'nlp' | 'ml' | 'ts' | 'hpc' | 'viz'
 
 export const domains: Record<Domain, T> = {
+  llm: 'RAG & LLM',
   vision: { fr: 'Vision', en: 'Vision' },
   nlp: 'NLP',
   ml: 'Machine Learning',
@@ -43,6 +44,7 @@ export type Project = {
   meta?: T[]
   award?: T
   featured?: boolean
+  links?: { label: string; href: string }[]
   sections: Section[]
 }
 
@@ -863,7 +865,156 @@ const returns: Project = {
   ],
 }
 
-export const projects: Project[] = [eye, fraud, sentiment, scoring, academic, returns, ariel].sort(
+const cacaobot: Project = {
+  slug: 'cacaobot',
+  sort: 202611,
+  featured: true,
+  title: {
+    fr: 'CacaoBot : RAG hybride et agent sur la filière cacao',
+    en: 'CacaoBot: hybrid RAG and agent on the cocoa sector',
+  },
+  short: {
+    fr: "Assistant qui répond sur la filière cacao à partir de 14 rapports en français et en anglais, en citant l'organisme, l'année et la page. Recherche hybride bilingue : recall@5 de 82 % à 94 %. Fonctionne en local.",
+    en: 'An assistant that answers questions on the cocoa sector from 14 reports in French and English, citing the organisation, year and page. Bilingual hybrid search: recall@5 from 82% to 94%. Runs locally.',
+  },
+  summary: {
+    fr: "Questions-réponses sur 14 rapports (Banque mondiale, ICCO, NORC, Fairtrade, règlement européen sur la déforestation…). Chaque réponse cite sa source ; quand l'information n'est pas dans les documents, l'assistant le dit.",
+    en: 'Question answering over 14 reports (World Bank, ICCO, NORC, Fairtrade, EU deforestation regulation…). Every answer cites its source; when the information is not in the documents, the assistant says so.',
+  },
+  context: { fr: 'Projet personnel', en: 'Personal project' },
+  period: { fr: 'Octobre – novembre 2026', en: 'October – November 2026' },
+  domains: ['llm', 'nlp'],
+  tech: ['Python', 'Ollama', 'qwen2.5:7b', 'bge-m3', 'ChromaDB', 'BM25', 'uv'],
+  links: [{ label: 'GitHub', href: 'https://github.com/sabio27/rag-agent-cocoabot' }],
+  sections: [
+    {
+      title: { fr: 'Fonctionnement', en: 'How it works' },
+      blocks: [
+        {
+          type: 'steps',
+          items: [
+            {
+              title: { fr: 'Découpage', en: 'Chunking' },
+              body: {
+                fr: '14 PDF découpés page par page en 3 168 segments, pour citer la page exacte. Les en-têtes répétés et les bibliographies sont retirés.',
+                en: '14 PDFs split page by page into 3,168 chunks, so the exact page can be cited. Repeated headers and bibliographies are removed.',
+              },
+            },
+            {
+              title: { fr: 'Indexation', en: 'Indexing' },
+              body: {
+                fr: 'Embeddings multilingues bge-m3 stockés dans ChromaDB.',
+                en: 'Multilingual bge-m3 embeddings stored in ChromaDB.',
+              },
+            },
+            {
+              title: { fr: 'Recherche hybride', en: 'Hybrid search' },
+              body: {
+                fr: 'Recherche sémantique + BM25 sur la question et sa traduction anglaise, classements fusionnés par Reciprocal Rank Fusion.',
+                en: 'Semantic search + BM25 on the question and its English translation, rankings merged with Reciprocal Rank Fusion.',
+              },
+            },
+            {
+              title: { fr: 'Réponse', en: 'Answer' },
+              body: {
+                fr: 'qwen2.5:7b via Ollama rédige la réponse à partir des 5 passages retenus, avec la citation (organisme, année, page).',
+                en: 'qwen2.5:7b via Ollama writes the answer from the 5 retrieved passages, with the citation (organisation, year, page).',
+              },
+            },
+          ],
+        },
+        {
+          type: 'text',
+          body: {
+            fr: "La recherche sémantique comprend les reformulations mais manque les sigles et les noms exacts ; BM25 les retrouve. BM25 seul ne relie pas une question française à un rapport anglais, d'où la recherche sur la traduction.",
+            en: 'Semantic search handles rephrasing but misses acronyms and exact names; BM25 finds them. BM25 alone cannot match a French question to an English report, hence the search on the translation.',
+          },
+        },
+      ],
+    },
+    {
+      title: { fr: 'Agent à outils', en: 'Tool-using agent' },
+      blocks: [
+        {
+          type: 'defs',
+          items: [
+            {
+              term: { fr: 'Recherche documentaire', en: 'Document search' },
+              desc: {
+                fr: "Le modèle lance une ou plusieurs recherches : une par sous-question quand il compare deux sources.",
+                en: 'The model runs one or more searches: one per sub-question when it compares two sources.',
+              },
+            },
+            {
+              term: { fr: 'Calculatrice', en: 'Calculator' },
+              desc: {
+                fr: "Analyse l'expression avec ast, sans l'exécuter comme du code.",
+                en: 'Parses the expression with ast, without executing it as code.',
+              },
+            },
+            {
+              term: { fr: 'Boucle', en: 'Loop' },
+              desc: {
+                fr: 'Écrite sans framework : 6 itérations au maximum et détection des appels répétés.',
+                en: 'Written without a framework: 6 iterations at most and detection of repeated calls.',
+              },
+            },
+          ],
+        },
+        {
+          type: 'text',
+          body: {
+            fr: "Sur le prix bord champ 2018-19, le RAG avait le bon passage mais calculait 975 FCFA ; l'agent passe par la calculatrice et trouve 750 FCFA. En contrepartie, une question composée lui demande 4 appels au modèle contre 2 pour le RAG. L'agent n'est pas encore évalué sur le jeu de questions.",
+            en: 'On the 2018-19 farm-gate price, the RAG had the right passage but computed 975 FCFA; the agent uses the calculator and gets 750 FCFA. The trade-off: a compound question takes 4 model calls versus 2 for the RAG. The agent has not yet been evaluated on the question set.',
+          },
+        },
+      ],
+    },
+    {
+      title: { fr: 'Évaluation', en: 'Evaluation' },
+      blocks: [
+        {
+          type: 'stats',
+          items: [
+            { value: '21', label: { fr: 'questions vérifiées dans les rapports', en: 'questions checked against the reports' }, note: { fr: '12 factuelles, 5 multilingues, 4 hors corpus', en: '12 factual, 5 multilingual, 4 out of scope' } },
+            { value: '94 %', label: 'Recall@5', note: { fr: 'contre 82 % en sémantique seule', en: 'vs 82% with semantic search alone' } },
+            { value: '0,80', label: 'MRR', note: { fr: 'contre 0,70', en: 'vs 0.70' } },
+          ],
+        },
+        {
+          type: 'table',
+          head: ['Version', { fr: 'Modification', en: 'Change' }, 'Recall@5', 'MRR', { fr: 'Exactitude*', en: 'Accuracy*' }],
+          rows: [
+            [{ fr: 'Base', en: 'Baseline' }, { fr: 'Sémantique seule', en: 'Semantic only' }, '82 %', '0,70', '76 %'],
+            ['v1', { fr: '+ BM25', en: '+ BM25' }, '82 %', '0,68', '76 %'],
+            ['v1b', { fr: '+ BM25 sur la traduction anglaise', en: '+ BM25 on the English translation' }, '94 %', '0,80', '82 %'],
+            ['v2', { fr: 'Prompt à 8 règles strictes', en: 'Prompt with 8 strict rules' }, '94 %', '0,80', '74 %'],
+            ['v3', { fr: 'Modèle 14B au lieu de 7B', en: '14B model instead of 7B' }, '94 %', '0,80', '85 %'],
+          ],
+          highlight: 2,
+          note: {
+            fr: "* Notée par un LLM correcteur, qui surestime d'environ 8 points d'après une vérification manuelle ; le recall est calculé sans LLM. v2 fait baisser l'exactitude ; v3 gagne une demi-question pour un temps de réponse doublé. Les questions hors corpus sont refusées dans toutes les versions.",
+            en: '* Graded by an LLM judge, which overestimates by about 8 points according to a manual check; recall is computed without an LLM. v2 lowers accuracy; v3 gains half a question for twice the response time. Out-of-scope questions are refused in every version.',
+          },
+        },
+      ],
+    },
+    {
+      title: { fr: 'Limites', en: 'Limitations' },
+      blocks: [
+        {
+          type: 'text',
+          body: {
+            fr: "Les tableaux des rapports sont extraits comme une suite de nombres sans colonnes : c'est la principale source d'erreur sur les questions chiffrées. Le gain de v1b reste à confirmer sur des questions nouvelles, la solution ayant été conçue à partir des échecs de ce jeu.",
+            en: "Report tables are extracted as a run of numbers without columns: this is the main source of errors on numeric questions. The v1b gain still needs confirming on new questions, since the fix was designed from this set's failures.",
+          },
+        },
+      ],
+    },
+  ],
+}
+
+export const projects: Project[] = [cacaobot, eye, fraud, sentiment, scoring, academic, returns, ariel].sort(
   (a, b) => b.sort - a.sort,
 )
 

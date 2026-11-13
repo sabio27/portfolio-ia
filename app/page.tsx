@@ -6,7 +6,7 @@ import { person, ui } from '@/lib/site'
 import CvLink from '@/components/CvLink'
 import { ArrowIcon, GithubIcon, GridIcon, LinkedinIcon, MailIcon, PhoneIcon } from '@/components/Icons'
 
-const stack = ['Python', 'PyTorch', 'YOLO', 'scikit-learn', 'LightGBM', 'spaCy', 'multiprocessing', 'FastAPI', 'Docker', 'MLflow']
+const stack = ['Python', 'PyTorch', 'YOLO', 'scikit-learn', 'LightGBM', 'spaCy', 'Ollama', 'ChromaDB', 'multiprocessing', 'FastAPI', 'Docker', 'MLflow']
 
 const expertise = [
   {
@@ -24,10 +24,10 @@ const expertise = [
     },
   },
   {
-    title: { fr: 'NLP & séries temporelles', en: 'NLP & time series' },
+    title: { fr: 'NLP & LLM', en: 'NLP & LLM' },
     body: {
-      fr: 'Analyse de sentiments, classification de textes, prévision.',
-      en: 'Sentiment analysis, text classification, forecasting.',
+      fr: 'Analyse de sentiments, RAG hybride, agents à outils.',
+      en: 'Sentiment analysis, hybrid RAG, tool-using agents.',
     },
   },
   {
@@ -47,7 +47,7 @@ export default function Home() {
       value: { fr: '6 mois', en: '6 months' },
       label: { fr: 'en R&D chez LYNK, de la donnée au déploiement', en: 'in R&D at LYNK, from data to deployment' },
     },
-    { value: '7', label: { fr: 'projets détaillés sur ce site', en: 'projects detailed on this site' } },
+    { value: '8', label: { fr: 'projets détaillés sur ce site', en: 'projects detailed on this site' } },
     { value: '3ᵉ', label: { fr: 'national — Défi IA ESA-Ariel', en: 'nationally — ESA-Ariel AI Challenge' } },
   ]
 

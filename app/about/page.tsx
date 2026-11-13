@@ -61,8 +61,8 @@ export default function About() {
             </p>
             <p>
               {t({
-                fr: "J'ai commencé par une licence de mathématiques, ce qui m'a laissé de bonnes bases en statistiques. Depuis, j'ai travaillé sur des images de rétine et de cacaoyers, des tweets, des spectres d'exoplanètes et une simulation de fraude en calcul parallèle.",
-                en: 'I started with a degree in mathematics, which left me with solid grounding in statistics. Since then I have worked on retina and cocoa tree images, tweets, exoplanet spectra and a parallel fraud simulation.',
+                fr: "J'ai commencé par une licence de mathématiques, ce qui m'a laissé de bonnes bases en statistiques. Depuis, j'ai travaillé sur des images de rétine et de cacaoyers, des tweets, des spectres d'exoplanètes, une simulation de fraude en calcul parallèle et un assistant RAG sur des rapports de la filière cacao.",
+                en: 'I started with a degree in mathematics, which left me with solid grounding in statistics. Since then I have worked on retina and cocoa tree images, tweets, exoplanet spectra, a parallel fraud simulation and a RAG assistant over cocoa sector reports.',
               })}
             </p>
             <p>

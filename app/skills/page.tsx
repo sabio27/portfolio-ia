@@ -7,6 +7,15 @@ type Skill = { name: T; desc: T }
 
 const categories: { title: T; skills: Skill[] }[] = [
   {
+    title: 'LLM & RAG',
+    skills: [
+      { name: 'Ollama', desc: { fr: "Modèles open source en local, appel d'outils", en: 'Local open-source models, tool calling' } },
+      { name: 'ChromaDB', desc: { fr: 'Base vectorielle pour la recherche sémantique', en: 'Vector store for semantic search' } },
+      { name: 'BM25 + RRF', desc: { fr: 'Recherche hybride mots-clés et sémantique', en: 'Hybrid keyword and semantic search' } },
+      { name: { fr: 'Évaluation RAG', en: 'RAG evaluation' }, desc: { fr: 'Recall@5, MRR, jeu de questions vérifiées', en: 'Recall@5, MRR, verified question set' } },
+    ],
+  },
+  {
     title: { fr: 'Deep learning & vision par ordinateur', en: 'Deep learning & computer vision' },
     skills: [
       { name: 'PyTorch', desc: { fr: 'Réseaux de neurones, entraînement et évaluation', en: 'Neural networks, training and evaluation' } },
