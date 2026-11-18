@@ -52,27 +52,15 @@ export default function About() {
         {/* Présentation */}
         <section className="mb-16">
           <h2 className="section-title">{lang === 'fr' ? 'Profil' : 'Profile'}</h2>
-          <div className="card space-y-4 p-6 text-base leading-relaxed text-gray-300 md:p-8 md:text-lg">
+          <div className="card p-6 text-base leading-relaxed text-gray-300 md:p-8 md:text-lg">
             <p>
               {t({
-                fr: "Je suis ingénieur en intelligence artificielle. Après une licence de mathématiques, j'ai fait mon master en IA à l'Université Félix Houphouët-Boigny, en partenariat avec Rennes 2.",
-                en: "I am an artificial intelligence engineer. After a degree in mathematics, I did my master's in AI at Félix Houphouët-Boigny University, in partnership with Rennes 2.",
-              })}
-            </p>
-            <p>
-              {t({
-                fr: "Je travaille aujourd'hui chez Lynk sur la détection des maladies du cacaoyer par vision par ordinateur. Le modèle tourne en production ; il sert aussi à estimer les pertes de récolte et le risque d'infection par parcelle.",
-                en: 'I currently work at Lynk on detecting cocoa tree diseases with computer vision. The model runs in production and is also used to estimate crop losses and infection risk for each plot.',
+                fr: "Je suis ingénieur en intelligence artificielle. Après une licence de mathématiques, j'ai fait mon master en IA à l'Université Félix Houphouët-Boigny, en partenariat avec Rennes 2. Je travaille aujourd'hui chez Lynk sur la détection des maladies du cacaoyer par vision par ordinateur, et je m'intéresse aux LLM. Je fais aussi du machine learning et assure la mise en production de mes modèles.",
+                en: "I am an artificial intelligence engineer. After a degree in mathematics, I did my master's in AI at Félix Houphouët-Boigny University, in partnership with Rennes 2. I currently work at Lynk on detecting cocoa tree diseases with computer vision, and I am interested in LLMs. I also do machine learning and handle the deployment of my models to production.",
               })}{' '}
               <Link href="/experience" className="font-semibold text-brand-400 hover:text-brand-300">
                 {lang === 'fr' ? 'Voir le détail →' : 'See details →'}
               </Link>
-            </p>
-            <p>
-              {t({
-                fr: "Je m'intéresse aux LLM. Je fais aussi du machine learning, et je m'occupe de la mise en production de mes modèles.",
-                en: 'I am interested in LLMs. I also do machine learning, and I take care of deploying my models to production.',
-              })}
             </p>
           </div>
         </section>
