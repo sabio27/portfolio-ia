@@ -44,8 +44,8 @@ export default function Home() {
 
   const stats = [
     {
-      value: { fr: '6 mois', en: '6 months' },
-      label: { fr: 'en R&D chez LYNK, de la donnée au déploiement', en: 'in R&D at LYNK, from data to deployment' },
+      value: 'Lynk',
+      label: { fr: 'ingénieur IA et Data depuis avril 2026', en: 'AI and Data Engineer since April 2026' },
     },
     { value: '8', label: { fr: 'projets détaillés sur ce site', en: 'projects detailed on this site' } },
     { value: '3ᵉ', label: { fr: 'national — Défi IA ESA-Ariel', en: 'nationally — ESA-Ariel AI Challenge' } },
@@ -80,13 +80,10 @@ export default function Home() {
           {/* Texte */}
           <div className="order-2 space-y-6 lg:col-span-3">
             <div className="inline-flex items-start gap-3 rounded-2xl border border-brand-600/40 bg-brand-900/30 px-4 py-2.5">
-              <span className="relative mt-1.5 flex h-2.5 w-2.5 shrink-0">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
-              </span>
+              <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-brand-500" aria-hidden />
               <span className="text-sm leading-snug">
-                <span className="block font-semibold text-white">{t(ui.available)}</span>
-                <span className="block text-gray-400">{t(ui.workMode)}</span>
+                <span className="block font-semibold text-white">{t(ui.currentRole)}</span>
+                <span className="block text-gray-400">{t(ui.currentDetail)}</span>
               </span>
             </div>
 
@@ -101,21 +98,22 @@ export default function Home() {
             <p className="max-w-2xl text-base leading-relaxed text-gray-300 md:text-lg">
               {lang === 'fr' ? (
                 <>
-                  Basé à Abidjan, j’analyse des données et je construis des modèles de{' '}
-                  <span className="font-semibold text-brand-400">vision par ordinateur</span>, de{' '}
-                  <span className="font-semibold text-brand-400">machine learning</span> et de{' '}
-                  <span className="font-semibold text-brand-400">NLP</span>, que je mets ensuite à disposition sous
-                  forme d’API ou d’applications. Quand les volumes de données l’exigent, je m’appuie sur le{' '}
-                  <span className="font-semibold text-brand-400">calcul parallèle</span>.
+                  Je suis ingénieur en intelligence artificielle. Après une licence de mathématiques, j’ai fait mon
+                  master en IA à l’Université Félix Houphouët-Boigny, en partenariat avec Rennes 2. Je travaille
+                  aujourd’hui sur la détection des maladies du cacaoyer par{' '}
+                  <span className="font-semibold text-brand-400">vision par ordinateur</span>, et je m’intéresse aux{' '}
+                  <span className="font-semibold text-brand-400">LLM</span>. Je fais aussi du{' '}
+                  <span className="font-semibold text-brand-400">machine learning</span> et assure la{' '}
+                  <span className="font-semibold text-brand-400">mise en production</span> de mes modèles.
                 </>
               ) : (
                 <>
-                  Based in Abidjan, I analyse data and build{' '}
-                  <span className="font-semibold text-brand-400">computer vision</span>,{' '}
-                  <span className="font-semibold text-brand-400">machine learning</span> and{' '}
-                  <span className="font-semibold text-brand-400">NLP</span> models, which I then make available as
-                  APIs or applications. When data volumes call for it, I rely on{' '}
-                  <span className="font-semibold text-brand-400">parallel computing</span>.
+                  I am an artificial intelligence engineer. After a degree in mathematics, I did my master’s in AI at
+                  Félix Houphouët-Boigny University, in partnership with Rennes 2. I currently work on detecting cocoa
+                  tree diseases with <span className="font-semibold text-brand-400">computer vision</span>, and I am
+                  interested in <span className="font-semibold text-brand-400">LLMs</span>. I also do{' '}
+                  <span className="font-semibold text-brand-400">machine learning</span> and handle the{' '}
+                  <span className="font-semibold text-brand-400">deployment</span> of my models to production.
                 </>
               )}
             </p>

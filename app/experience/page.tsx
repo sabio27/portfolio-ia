@@ -5,7 +5,7 @@ import { useLang, type T } from '@/lib/i18n'
 import PageHeader from '@/components/PageHeader'
 import { ArrowIcon } from '@/components/Icons'
 
-/* Contenu tiré du mémoire de fin d'études (LYNK SARL, avril – septembre 2026). */
+/* Poste chez Lynk (depuis avril 2026). */
 
 const pipeline: { title: T; body: T }[] = [
   {
@@ -62,6 +62,10 @@ const perClass = [
 
 const missions: T[] = [
   {
+    fr: 'Développement et maintien en production du modèle qui détecte les maladies du cacaoyer sur photos.',
+    en: 'Developing and maintaining in production the model that detects cocoa tree diseases from photos.',
+  },
+  {
     fr: "Constitution d'un corpus de 20 196 images par fusion et nettoyage de plusieurs jeux de données (doublons, images floues, annotations incohérentes).",
     en: 'Built a 20,196-image corpus by merging and cleaning several datasets (duplicates, blurry images, inconsistent labels).',
   },
@@ -102,14 +106,14 @@ export default function ExperiencePage() {
               <div>
                 <p className="mb-1 text-sm font-semibold uppercase tracking-wider text-gold-400">LYNK SARL · Agritech</p>
                 <h2 className="text-2xl font-extrabold text-white md:text-3xl">
-                  {t({ fr: 'Stagiaire Ingénieur IA — Computer Vision', en: 'AI Engineer Intern — Computer Vision' })}
+                  {t({ fr: 'Ingénieur IA et Data', en: 'AI and Data Engineer' })}
                 </h2>
                 <p className="mt-2 text-gray-400">
-                  {t({ fr: "Pôle Recherche & Développement · Abidjan, Côte d'Ivoire", en: "Research & Development team · Abidjan, Côte d'Ivoire" })}
+                  {t({ fr: "Abidjan, Côte d'Ivoire", en: "Abidjan, Côte d'Ivoire" })}
                 </p>
               </div>
               <span className="w-fit shrink-0 rounded-full border border-brand-700/50 bg-brand-900/40 px-4 py-1.5 text-sm font-semibold text-brand-300">
-                {t({ fr: 'Avril – Septembre 2026', en: 'April – September 2026' })}
+                {t({ fr: 'Depuis avril 2026', en: 'Since April 2026' })}
               </span>
             </div>
           </header>
@@ -122,8 +126,8 @@ export default function ExperiencePage() {
               </h3>
               <p className="max-w-3xl leading-relaxed text-gray-300">
                 {t({
-                  fr: "La cacaoculture ivoirienne subit d'importantes pertes dues à la pourriture brune et au swollen shoot (CSSV). Leur détection repose encore sur l'inspection visuelle des parcelles : souvent tardive, variable d'un observateur à l'autre et difficile à mener sur de grandes surfaces. J'ai conçu et implémenté un système qui mène d'une simple photo de cacaoyer à une recommandation de traitement.",
-                  en: "Ivorian cocoa farming suffers heavy losses from black pod and cocoa swollen shoot virus (CSSV). Detection still relies on visual inspection of plots, which is often late, varies between observers and is hard to scale to large areas. I designed and built a system that goes from a single photo of a cocoa tree to a treatment recommendation.",
+                  fr: "La cacaoculture ivoirienne subit d'importantes pertes dues à la pourriture brune et au swollen shoot (CSSV). Leur détection repose encore sur l'inspection visuelle des parcelles : souvent tardive, variable d'un observateur à l'autre et difficile à mener sur de grandes surfaces. Je développe et maintiens un système qui mène d'une simple photo de cacaoyer à une recommandation de traitement.",
+                  en: "Ivorian cocoa farming suffers heavy losses from black pod and cocoa swollen shoot virus (CSSV). Detection still relies on visual inspection of plots, which is often late, varies between observers and is hard to scale to large areas. I develop and maintain a system that goes from a single photo of a cocoa tree to a treatment recommendation.",
                 })}
               </p>
             </section>
@@ -157,7 +161,7 @@ export default function ExperiencePage() {
             {/* Missions + résultats par classe */}
             <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
               <section>
-                <h3 className="section-title !text-xl md:!text-2xl">{t({ fr: 'Missions réalisées', en: 'What I did' })}</h3>
+                <h3 className="section-title !text-xl md:!text-2xl">{t({ fr: 'Missions', en: 'Responsibilities' })}</h3>
                 <ul className="space-y-4">
                   {missions.map((m, i) => (
                     <li key={i} className="flex gap-3 leading-relaxed text-gray-300">
@@ -207,8 +211,8 @@ export default function ExperiencePage() {
         <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-2xl border border-brand-700/40 bg-gradient-to-r from-brand-900/30 to-gold-900/10 p-6 text-center md:flex-row md:text-left">
           <p className="text-gray-300">
             {t({
-              fr: 'Formation, points forts et objectif professionnel : tout est sur la page À propos.',
-              en: 'Education, strengths and career goal are on the About page.',
+              fr: 'Formation et points forts : voir la page À propos.',
+              en: 'Education and strengths are on the About page.',
             })}
           </p>
           <Link href="/about" className="inline-flex shrink-0 items-center gap-2 font-semibold text-brand-400 hover:text-brand-300">

@@ -63,16 +63,8 @@ export default function Contact() {
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-1">
           <div className="rounded-2xl border border-brand-600/40 bg-gradient-to-br from-brand-900/40 to-gold-900/20 p-6">
-            <div className="mb-3 flex items-center gap-3">
-              <span className="relative flex h-3 w-3">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
-              </span>
-              <span className="font-semibold text-white">{lang === 'fr' ? 'Disponible' : 'Available'}</span>
-            </div>
-            <p className="text-sm leading-relaxed text-gray-300">
-              {t(ui.available)}. {t(ui.workMode)}.
-            </p>
+            <p className="font-semibold text-white">{t(ui.currentRole)}</p>
+            <p className="mt-1 text-sm text-gray-400">{t(ui.currentDetail)}</p>
           </div>
 
           <ul className="space-y-3">

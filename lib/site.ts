@@ -4,7 +4,7 @@ export const person = {
   name: 'Koffi Ambroise',
   displayName: 'Koffi K. Ambroise',
   fullName: 'Koffi Koffi Ambroise',
-  role: { fr: 'Ingénieur IA & Data Science', en: 'AI & Data Science Engineer' } as T,
+  role: { fr: 'Ingénieur IA et Data Science', en: 'AI and Data Science Engineer' } as T,
   email: 'ambroise.kf@gmail.com',
   phones: [
     { label: '+225 05 44 80 17 44', href: 'tel:+2250544801744' },
@@ -36,12 +36,12 @@ export const ui = {
   seeProjects: { fr: 'Voir mes projets', en: 'View my projects' },
   allProjects: { fr: 'Tous les projets', en: 'All projects' },
   backToProjects: { fr: 'Retour aux projets', en: 'Back to projects' },
-  available: {
-    fr: 'Ouvert aux opportunités de poste en IA, Data, ML et Vision par ordinateur',
-    en: 'Open to roles in AI, Data, ML and Computer Vision',
+  currentRole: {
+    fr: 'Ingénieur IA et Data chez Lynk',
+    en: 'AI and Data Engineer at Lynk',
   },
-  workMode: {
-    fr: 'En présentiel comme en télétravail',
-    en: 'On-site or remote',
+  currentDetail: {
+    fr: "Agritech · Abidjan · depuis avril 2026",
+    en: 'Agritech · Abidjan · since April 2026',
   },
 } satisfies Record<string, T>

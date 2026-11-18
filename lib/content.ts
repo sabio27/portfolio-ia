@@ -4,7 +4,7 @@ import type { T } from './i18n'
 /* Parcours académique (page À propos)                                  */
 /* ------------------------------------------------------------------ */
 
-export const education: { title: T; school: T; period: T; tags: T[] }[] = [
+export const education: { title: T; school: T; period?: T; tags: T[] }[] = [
   {
     title: { fr: 'Master 2 — Intelligence Artificielle', en: "Master's Degree (M2) — Artificial Intelligence" },
     school: {
@@ -35,9 +35,8 @@ export const education: { title: T; school: T; period: T; tags: T[] }[] = [
     ],
   },
   {
-    title: { fr: 'Licence — Mathématiques appliquées', en: "Bachelor's Degree — Applied Mathematics" },
+    title: { fr: 'Licence — Mathématiques et applications', en: "Bachelor's Degree — Mathematics and Applications" },
     school: { fr: 'Université Félix Houphouët-Boigny · Abidjan', en: 'Félix Houphouët-Boigny University · Abidjan' },
-    period: '2018 – 2019',
     tags: [
       { fr: 'Mathématiques discrètes', en: 'Discrete mathematics' },
       { fr: 'Calcul scientifique', en: 'Scientific computing' },

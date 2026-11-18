@@ -55,24 +55,24 @@ export default function About() {
           <div className="card space-y-4 p-6 text-base leading-relaxed text-gray-300 md:p-8 md:text-lg">
             <p>
               {t({
-                fr: "Je suis ingénieur IA & Data Science, diplômé d'un Master en Intelligence Artificielle de l'Université Félix Houphouët-Boigny, en partenariat avec l'Université Rennes 2. J'aime surtout la partie où un modèle quitte le notebook pour servir à quelqu'un : une API, une application, un outil qu'on peut tester.",
-                en: "I am an AI & Data Science Engineer with a Master's in Artificial Intelligence from Félix Houphouët-Boigny University, in partnership with Rennes 2 University. The part I enjoy most is when a model leaves the notebook and becomes useful to someone: an API, an app, a tool people can try.",
+                fr: "Je suis ingénieur en intelligence artificielle. Après une licence de mathématiques, j'ai fait mon master en IA à l'Université Félix Houphouët-Boigny, en partenariat avec Rennes 2.",
+                en: "I am an artificial intelligence engineer. After a degree in mathematics, I did my master's in AI at Félix Houphouët-Boigny University, in partnership with Rennes 2.",
               })}
             </p>
             <p>
               {t({
-                fr: "J'ai commencé par une licence de mathématiques, ce qui m'a laissé de bonnes bases en statistiques. Depuis, j'ai travaillé sur des images de rétine et de cacaoyers, des tweets, des spectres d'exoplanètes, une simulation de fraude en calcul parallèle et un assistant RAG sur des rapports de la filière cacao.",
-                en: 'I started with a degree in mathematics, which left me with solid grounding in statistics. Since then I have worked on retina and cocoa tree images, tweets, exoplanet spectra, a parallel fraud simulation and a RAG assistant over cocoa sector reports.',
-              })}
-            </p>
-            <p>
-              {t({
-                fr: "Pendant mon stage de fin d'études chez LYNK SARL, j'ai construit seul un système qui part d'une photo de cacaoyer pour arriver à une recommandation de traitement. Il tourne sous forme de trois API dans des conteneurs Docker.",
-                en: 'During my final internship at LYNK SARL, I built on my own a system that goes from a photo of a cocoa tree to a treatment recommendation. It runs as three APIs in Docker containers.',
+                fr: "Je travaille aujourd'hui chez Lynk sur la détection des maladies du cacaoyer par vision par ordinateur. Le modèle tourne en production ; il sert aussi à estimer les pertes de récolte et le risque d'infection par parcelle.",
+                en: 'I currently work at Lynk on detecting cocoa tree diseases with computer vision. The model runs in production and is also used to estimate crop losses and infection risk for each plot.',
               })}{' '}
               <Link href="/experience" className="font-semibold text-brand-400 hover:text-brand-300">
                 {lang === 'fr' ? 'Voir le détail →' : 'See details →'}
               </Link>
+            </p>
+            <p>
+              {t({
+                fr: "Je m'intéresse aux LLM. Je fais aussi du machine learning, et je m'occupe de la mise en production de mes modèles.",
+                en: 'I am interested in LLMs. I also do machine learning, and I take care of deploying my models to production.',
+              })}
             </p>
           </div>
         </section>
@@ -87,7 +87,7 @@ export default function About() {
                 <div className="card card-hover p-6">
                   <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                     <h3 className="text-lg font-bold text-brand-400 md:text-xl">{t(e.title)}</h3>
-                    <span className="w-fit shrink-0 rounded-full bg-brand-900/40 px-3 py-1 text-sm text-gray-300">{t(e.period)}</span>
+                    {e.period && <span className="w-fit shrink-0 rounded-full bg-brand-900/40 px-3 py-1 text-sm text-gray-300">{t(e.period)}</span>}
                   </div>
                   <p className="mb-4 text-gray-400">{t(e.school)}</p>
                   <div className="flex flex-wrap gap-2">
@@ -121,17 +121,14 @@ export default function About() {
           </div>
         </section>
 
-        {/* Objectif professionnel */}
+        {/* En bref */}
         <section>
-          <h2 className="section-title">{lang === 'fr' ? 'Objectif professionnel' : 'Career goal'}</h2>
+          <h2 className="section-title">{lang === 'fr' ? 'En bref' : 'At a glance'}</h2>
           <div className="rounded-2xl border border-brand-700/50 bg-gradient-to-r from-brand-900/40 to-gold-900/20 p-6 md:p-8">
-            <h3 className="mb-4 text-xl font-bold text-white">
-              {t({ fr: 'Poste en IA, Data, Machine Learning ou Vision par ordinateur', en: 'Role in AI, Data, Machine Learning or Computer Vision' })}
-            </h3>
             <dl className="grid gap-3 text-gray-300 sm:grid-cols-2">
               {[
-                [{ fr: 'Postes visés', en: 'Target roles' }, { fr: 'Ingénieur IA, Data Scientist, ML Engineer, Ingénieur Computer Vision', en: 'AI Engineer, Data Scientist, ML Engineer, Computer Vision Engineer' }],
-                [{ fr: 'Modalités', en: 'Work mode' }, { fr: 'Sur site ou en télétravail', en: 'On-site or remote' }],
+                [{ fr: 'Poste', en: 'Position' }, { fr: 'Ingénieur IA et Data, Lynk (depuis avril 2026)', en: 'AI and Data Engineer, Lynk (since April 2026)' }],
+                [{ fr: 'Domaines', en: 'Areas' }, { fr: 'Vision par ordinateur, LLM, machine learning, mise en production', en: 'Computer vision, LLMs, machine learning, deployment' }],
                 [{ fr: 'Localisation', en: 'Location' }, "Abidjan, Côte d'Ivoire"],
                 [{ fr: 'Langues', en: 'Languages' }, { fr: 'Français (natif), anglais (B1)', en: 'French (native), English (B1)' }],
               ].map(([k, v], i) => (
